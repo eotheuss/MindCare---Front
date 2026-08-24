@@ -5,6 +5,7 @@ import { ProfissionalDTO } from './profissional.model';
 export interface ClinicaDTO {
   id?: number;
   nome: string;
+  cnpj: string;
   endereco: string;
   profissionais: ProfissionalDTO[];
   pacientes: PacienteDTO[];

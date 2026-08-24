@@ -26,7 +26,7 @@ export class DashboardComponent {
   readonly anoAtual = new Date().getFullYear();
   readonly mesAtual = new Date().getMonth() + 1;
 
-  clinicaId = signal<number | null>(null);
+  clinicaCnpj = signal<string | null>(null);
   ano = signal<number>(this.anoAtual);
 
   loading = signal(false);
@@ -52,50 +52,38 @@ export class DashboardComponent {
   constructor(private clinicaService: ClinicaService) {}
 
   carregar(): void {
-    const id = this.clinicaId();
-    if (!id) {
-      this.erro.set('Informe o ID da clínica.');
+    const cnpj = this.clinicaCnpj();
+    if (!cnpj) {
+      this.erro.set('Informe o CNPJ da clínica.');
       return;
     }
 
     this.loading.set(true);
     this.erro.set(null);
 
-    forkJoin({
-      clinica: this.clinicaService.buscarPorId(id),
-      pacientes: this.clinicaService.buscarPacientes(id),
-      profissionais: this.clinicaService.buscarProfissionais(id),
-    })
-      .pipe(
-        catchError(() => {
-          this.erro.set(
-            'Não foi possível carregar a clínica. Verifique o ID e se a API está rodando em localhost:8080.'
-          );
-          return of(null);
-        })
-      )
-      .subscribe((resultado) => {
-        if (!resultado) {
-          this.loading.set(false);
-          return;
-        }
+    this.clinicaService.buscarPorNome(cnpj).subscribe((resultado) => {
+      if (!resultado) {
+        this.loading.set(false);
+        return;
+      }
 
-        this.nomeClinica.set(resultado.clinica.nome);
-        this.planoAssinatura.set(resultado.clinica.planoAssinatura);
-        this.totalPacientes.set(resultado.pacientes.length);
-        this.totalProfissionais.set(resultado.profissionais.length);
+      this.nomeClinica.set(resultado.nome);
+      this.planoAssinatura.set(resultado.planoAssinatura);
+      // this.totalPacientes.set(resultado.pacientes.length);
+      // this.totalProfissionais.set(resultado.profissionais.length);
 
-        this.carregarSerieMensal(id);
-      });
+      this.carregarSerieMensal(cnpj);
+    });
+
   }
 
-  private carregarSerieMensal(clinicaId: number): void {
+  private carregarSerieMensal(clinicaCnpj: string): void {
     const ano = this.ano();
     const chamadasPorMes = Array.from({ length: 12 }, (_, indice) => {
       const mes = indice + 1;
       return forkJoin({
-        bruto: this.clinicaService.buscarFaturamento(clinicaId, ano, mes),
-        liquido: this.clinicaService.buscarReceitaAposDescontos(clinicaId, ano, mes),
+        bruto: this.clinicaService.buscarFaturamento(clinicaCnpj, ano, mes),
+        liquido: this.clinicaService.buscarReceitaAposDescontos(clinicaCnpj, ano, mes),
       }).pipe(catchError(() => of({ bruto: 0, liquido: 0 })));
     });
 
