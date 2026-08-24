@@ -1,0 +1,144 @@
+:root {
+  /* paleta extraída do export de código do Figma (LoginScreen.tsx / AdminDashboard.tsx) */
+  --brand-blue: #1976d2;
+  --brand-blue-light: #00b0ff;
+  --brand-blue-pale: #e3f2fd;
+  --brand-purple: #9c27b0;
+  --brand-purple-light: #ab47bc;
+  --brand-purple-pale: #f3e5f5;
+  --brand-blue-deep: #1565c0;
+  --brand-indigo: #6a1b9a;
+
+  --app-bg: #f0f4f8;
+  --surface: #ffffff;
+  --surface-2: #f9fafb;
+  --border: #e5e7eb;
+  --ink: #1f2937;
+  --ink-soft: #6b7280;
+  --ink-faint: #9ca3af;
+  --focus: var(--brand-blue);
+
+  --success: #16a34a;
+  --success-bg: #f0fdf4;
+  --success-border: #bbf7d0;
+  --warning: #ea580c;
+  --warning-bg: #fff7ed;
+  --warning-border: #fed7aa;
+  --danger: #dc2626;
+  --danger-bg: #fef2f2;
+  --danger-border: #fecaca;
+  --teal: #0d9488;
+  --teal-bg: #ccfbf1;
+  --pink: #db2777;
+  --pink-bg: #fce7f3;
+
+  --radius-card: 1rem;
+  --radius-pill: 999px;
+  --shadow-card: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-card-hover: 0 4px 12px -2px rgba(0, 0, 0, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --app-bg: #12141a;
+    --surface: #1b1e27;
+    --surface-2: #21242e;
+    --border: #2e3140;
+    --ink: #e9eaf0;
+    --ink-soft: #a0a4b8;
+    --ink-faint: #71758c;
+
+    --brand-blue-pale: #17233a;
+    --brand-purple-pale: #241a30;
+
+    --success-bg: #10261a;
+    --success-border: #1d4a2e;
+    --warning-bg: #2c1c0f;
+    --warning-border: #5a3517;
+    --danger-bg: #2c1416;
+    --danger-border: #5a2226;
+    --teal-bg: #0f2a27;
+    --pink-bg: #2a1622;
+
+    --shadow-card: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+    --shadow-card-hover: 0 4px 16px -2px rgba(0, 0, 0, 0.55);
+  }
+}
+
+:root[data-theme='dark'] {
+  --app-bg: #12141a;
+  --surface: #1b1e27;
+  --surface-2: #21242e;
+  --border: #2e3140;
+  --ink: #e9eaf0;
+  --ink-soft: #a0a4b8;
+  --ink-faint: #71758c;
+
+  --brand-blue-pale: #17233a;
+  --brand-purple-pale: #241a30;
+
+  --success-bg: #10261a;
+  --success-border: #1d4a2e;
+  --warning-bg: #2c1c0f;
+  --warning-border: #5a3517;
+  --danger-bg: #2c1416;
+  --danger-border: #5a2226;
+  --teal-bg: #0f2a27;
+  --pink-bg: #2a1622;
+
+  --shadow-card: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-card-hover: 0 4px 16px -2px rgba(0, 0, 0, 0.55);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--app-bg);
+  color: var(--ink);
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 600;
+  margin: 0;
+}
+
+button {
+  font-family: inherit;
+}
+
+a {
+  color: var(--brand-blue);
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: var(--brand-blue-pale);
+}

@@ -1,0 +1,29 @@
+<div class="bar-chart">
+  <div class="legend">
+    <span class="legend-item"><i class="dot bruto"></i>Faturamento bruto</span>
+    <span class="legend-item"><i class="dot liquido"></i>Receita líquida</span>
+  </div>
+
+  <div class="chart-area">
+    @for (point of points(); track point.index) {
+      <div
+        class="column"
+        (mouseenter)="hovered.set(point.index)"
+        (mouseleave)="hovered.set(null)"
+      >
+        @if (hovered() === point.index) {
+          <div class="tooltip">
+            <strong>{{ point.label }}</strong>
+            <span>Bruto: {{ formatCurrency(point.bruto) }}</span>
+            <span>Líquido: {{ formatCurrency(point.liquido) }}</span>
+          </div>
+        }
+        <div class="bars">
+          <div class="bar bruto" [style.height.%]="point.brutoHeight"></div>
+          <div class="bar liquido" [style.height.%]="point.liquidoHeight"></div>
+        </div>
+        <span class="month-label">{{ point.label }}</span>
+      </div>
+    }
+  </div>
+</div>

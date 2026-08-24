@@ -1,0 +1,235 @@
+<div class="details-screen">
+  <header class="hero">
+    <div class="hero-top">
+      <button class="icon-btn" (click)="voltar()">
+        <lucide-angular [img]="icons.ArrowLeft" [size]="18" />
+      </button>
+      <div class="avatar">{{ (paciente()?.nomeCompleto || nomeUsuario).slice(0, 2).toUpperCase() }}</div>
+      <div>
+        <h1>{{ paciente()?.nomeCompleto || nomeUsuario }}</h1>
+        <p>Ficha do paciente</p>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab" [class.active]="tab() === 'diarios'" (click)="tab.set('diarios')">
+        <lucide-angular [img]="icons.BookOpen" [size]="15" />
+        Diários
+      </button>
+      <button class="tab" [class.active]="tab() === 'relatorios'" (click)="tab.set('relatorios')">
+        <lucide-angular [img]="icons.FileText" [size]="15" />
+        Relatórios
+      </button>
+      <button class="tab" [class.active]="tab() === 'prescricoes'" (click)="tab.set('prescricoes')">
+        <lucide-angular [img]="icons.Pill" [size]="15" />
+        Prescrições
+      </button>
+    </div>
+  </header>
+
+  <div class="content">
+    @if (erro()) {
+      <div class="error-banner">{{ erro() }}</div>
+    }
+
+    <!-- DIÁRIOS -->
+    @if (tab() === 'diarios') {
+      <h2 class="section-title"><lucide-angular [img]="icons.Calendar" [size]="17" />Entradas do Diário</h2>
+
+      @if (carregandoDiarios()) {
+        <p class="status-text">Carregando…</p>
+      } @else if (diarios().length === 0) {
+        <p class="status-text">Este paciente ainda não fez nenhum registro.</p>
+      } @else {
+        @for (d of diarios(); track $index) {
+          <div class="diary-card">
+            <div class="diary-head" [style.background]="moodConfigFor(d.nivelHumor).color">
+              <span class="emoji">{{ moodConfigFor(d.nivelHumor).emoji }}</span>
+              <div>
+                <p class="diary-date">{{ formatarDataLonga(d.dataHoraCriacao) }}</p>
+                <p class="diary-mood">{{ moodConfigFor(d.nivelHumor).label }}</p>
+              </div>
+            </div>
+            <div class="diary-body">
+              <div>
+                <h4 class="c-success">✅ Pontos Positivos</h4>
+                <p>{{ d.pontosPositivos || '—' }}</p>
+              </div>
+              <div>
+                <h4 class="c-warning">⚠️ Desafios</h4>
+                <p>{{ d.dificuldadesDesafios || '—' }}</p>
+              </div>
+            </div>
+          </div>
+        }
+      }
+    }
+
+    <!-- RELATÓRIOS -->
+    @if (tab() === 'relatorios') {
+      <div class="section-header-row">
+        <h2 class="section-title"><lucide-angular [img]="icons.FileText" [size]="17" />Relatórios Semanais (IA)</h2>
+        <button class="generate-btn" [disabled]="gerandoRelatorio()" (click)="gerarRelatorio()">
+          <lucide-angular [img]="icons.Sparkles" [size]="14" />
+          {{ gerandoRelatorio() ? 'Gerando…' : 'Gerar novo' }}
+        </button>
+      </div>
+
+      @if (carregandoRelatorios()) {
+        <p class="status-text">Carregando…</p>
+      } @else if (relatorios().length === 0) {
+        <p class="status-text">Nenhum relatório gerado ainda. Use o botão acima para gerar um a partir dos diários recentes.</p>
+      } @else {
+        @for (r of relatorios(); track $index) {
+          <div class="report-card">
+            <h3>Semana: {{ formatarPeriodo(r.faixaDeDatas) }}</h3>
+            <div class="ai-box">
+              <h4>Análise da IA</h4>
+              <p>{{ r.relatorioIA || r.resumo }}</p>
+            </div>
+            <div class="stats-row">
+              <div class="stat positive">
+                <p class="stat-label">Dias positivos</p>
+                <p class="stat-value">{{ r.totalPositivos }}</p>
+              </div>
+              <div class="stat negative">
+                <p class="stat-label">Dias desafiadores</p>
+                <p class="stat-value">{{ r.totalNegativos }}</p>
+              </div>
+            </div>
+          </div>
+        }
+      }
+    }
+
+    <!-- PRESCRIÇÕES -->
+    @if (tab() === 'prescricoes') {
+      <div class="section-header-row">
+        <h2 class="section-title"><lucide-angular [img]="icons.Pill" [size]="17" />Receitas Médicas</h2>
+        <button class="generate-btn" (click)="toggleFormulario()">
+          <lucide-angular [img]="mostrarFormulario() ? icons.X : icons.Plus" [size]="14" />
+          {{ mostrarFormulario() ? 'Cancelar' : 'Nova receita' }}
+        </button>
+      </div>
+
+      @if (mostrarFormulario()) {
+        <div class="upload-card">
+          <div class="upload-header">
+            <lucide-angular [img]="icons.Upload" [size]="16" />
+            <div>
+              <h4>Enviar Nova Receita</h4>
+              <p>Faça o upload do PDF e preencha os dados</p>
+            </div>
+          </div>
+
+          <div class="upload-body">
+            <div
+              class="dropzone"
+              [class.dragging]="arrastando"
+              [class.has-file]="arquivo"
+              (dragover)="onDragOver($event)"
+              (dragleave)="onDragLeave()"
+              (drop)="onDrop($event)"
+              (click)="fileInput.click()"
+            >
+              <input #fileInput type="file" accept=".pdf,application/pdf" hidden (change)="onFileSelected($event)" />
+              @if (arquivo) {
+                <lucide-angular [img]="icons.CheckCircle2" [size]="26" class="c-success" />
+                <p class="file-name">{{ arquivo.name }}</p>
+                <p class="file-hint">Clique para trocar</p>
+              } @else {
+                <lucide-angular [img]="icons.Upload" [size]="26" />
+                <p class="file-name">Arraste o PDF aqui</p>
+                <p class="file-hint">ou clique para selecionar o arquivo</p>
+              }
+            </div>
+
+            <div class="field-grid">
+              <div class="field">
+                <label>Data de Emissão *</label>
+                <input type="date" [(ngModel)]="issueDate" />
+              </div>
+              <div class="field">
+                <label>Data de Vencimento *</label>
+                <input type="date" [(ngModel)]="expirationDate" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Medicamentos *</label>
+              @for (med of medicamentos; track $index) {
+                <div class="med-row">
+                  <input type="text" [(ngModel)]="medicamentos[$index]" placeholder="Ex: Escitalopram 10mg" />
+                  @if (medicamentos.length > 1) {
+                    <button type="button" class="remove-med" (click)="removerMedicamento($index)">
+                      <lucide-angular [img]="icons.X" [size]="15" />
+                    </button>
+                  }
+                </div>
+              }
+              <button type="button" class="add-med" (click)="adicionarMedicamento()">
+                <lucide-angular [img]="icons.Plus" [size]="14" />
+                Adicionar medicamento
+              </button>
+            </div>
+
+            <div class="controlled-toggle" [class.active]="controlled" (click)="controlled = !controlled">
+              <div class="checkbox">
+                @if (controlled) {
+                  <lucide-angular [img]="icons.CheckCircle2" [size]="13" />
+                }
+              </div>
+              <lucide-angular [img]="icons.ShieldAlert" [size]="15" />
+              <span>Receita de medicamento controlado</span>
+            </div>
+
+            <button type="button" class="send-btn" [disabled]="!podeEnviar || enviandoReceita()" (click)="enviarReceita()">
+              {{ enviandoReceita() ? 'Enviando…' : 'Enviar Receita ao Paciente' }}
+            </button>
+          </div>
+        </div>
+      }
+
+      @if (carregandoPrescricoes()) {
+        <p class="status-text">Carregando…</p>
+      } @else if (prescricoes().length === 0) {
+        <p class="status-text">Nenhuma receita enviada ainda.</p>
+      } @else {
+        @for (rx of prescricoes(); track rx.number) {
+          <div class="rx-card">
+            <div class="rx-header">
+              <span class="rx-title">
+                <lucide-angular [img]="icons.FileText" [size]="14" />
+                Receita #{{ rx.number }}
+                @if (rx.controlled) {
+                  <span class="controlled-badge">Controlado</span>
+                }
+              </span>
+              <span class="status-badge">
+                <lucide-angular [img]="statusIcon(statusReceita(rx))" [size]="13" />
+                {{ statusLabel(statusReceita(rx)) }}
+              </span>
+            </div>
+            <div class="rx-body">
+              <div class="dates-row">
+                <div class="date-box">
+                  <span class="date-label">Emissão</span>
+                  <p>{{ formatarDataCurtaPublica(rx.issueDate) }}</p>
+                </div>
+                <div class="date-box">
+                  <span class="date-label">Vencimento</span>
+                  <p>{{ formatarDataCurtaPublica(rx.expirationDate) }}</p>
+                </div>
+              </div>
+              <div class="meds-list">
+                @for (med of rx.medicines; track med) {
+                  <span class="med-chip">{{ med }}</span>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      }
+    }
+  </div>
+</div>

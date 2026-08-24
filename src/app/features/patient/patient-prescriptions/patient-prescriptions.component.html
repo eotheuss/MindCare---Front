@@ -1,0 +1,95 @@
+<div class="rx-screen">
+  <header class="hero">
+    <div class="hero-top">
+      <div>
+        <h1>Minhas Receitas</h1>
+        <p>Enviadas pelo seu profissional</p>
+      </div>
+    </div>
+    <div class="summary-pill">
+      <div class="summary-item">
+        <div class="summary-icon"><lucide-angular [img]="icons.Pill" [size]="18" /></div>
+        <div>
+          <p class="summary-label">Receitas ativas</p>
+          <p class="summary-value">{{ validCount }}</p>
+        </div>
+      </div>
+      <div class="summary-item right">
+        <div>
+          <p class="summary-label">Total de receitas</p>
+          <p class="summary-value">{{ prescricoes().length }}</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="info-banner">
+    <lucide-angular [img]="icons.ShieldAlert" [size]="18" />
+    <p>As receitas abaixo foram enviadas pelo seu profissional de saúde. Para retirar medicamentos controlados, apresente o PDF original na farmácia.</p>
+  </div>
+
+  <div class="content">
+    @if (carregando()) {
+      <p class="status-text">Carregando…</p>
+    } @else if (erro()) {
+      <p class="status-text error">{{ erro() }}</p>
+    } @else if (prescricoes().length === 0) {
+      <p class="status-text">Nenhuma receita enviada ainda.</p>
+    } @else {
+      @for (rx of prescricoes(); track rx.number) {
+        <div class="rx-card">
+          <div class="rx-header">
+            <div class="rx-title">
+              <span class="rx-number">Receita #{{ rx.number }}</span>
+              @if (rx.controlled) {
+                <span class="controlled-badge">Controlado</span>
+              }
+            </div>
+            <span class="status-badge">
+              <lucide-angular [img]="statusConfig(rx).icon" [size]="13" />
+              {{ statusConfig(rx).label }}
+            </span>
+          </div>
+
+          <div class="rx-body">
+            <div class="dates-row">
+              <div class="date-box">
+                <span class="date-label"><lucide-angular [img]="icons.Calendar" [size]="13" />Emissão</span>
+                <p>{{ formatarData(rx.issueDate) }}</p>
+              </div>
+              <div class="date-box highlight">
+                <span class="date-label">Vencimento</span>
+                <p>{{ formatarData(rx.expirationDate) }}</p>
+                <span class="days-hint">{{ diasRestantes(rx) }} dias restantes</span>
+              </div>
+            </div>
+
+            <div class="professional-row">
+              <div class="professional-icon"><lucide-angular [img]="icons.User" [size]="16" /></div>
+              <div>
+                <p class="professional-name">{{ rx.profissional.nomeCompleto }}</p>
+                <p class="professional-sub">{{ rx.profissional.tipoProfissional }} · {{ rx.profissional.registroProfissional }}</p>
+              </div>
+            </div>
+
+            <div>
+              <p class="meds-label">{{ rx.medicines.length }} medicamento(s)</p>
+              <div class="meds-list">
+                @for (med of rx.medicines; track med) {
+                  <span class="med-chip">{{ med }}</span>
+                }
+              </div>
+            </div>
+
+            <button class="download-btn" [disabled]="baixando() === rx.number" (click)="baixar(rx)">
+              <lucide-angular [img]="icons.Download" [size]="16" />
+              {{ baixando() === rx.number ? 'Baixando…' : 'Baixar PDF da Receita' }}
+            </button>
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+  <app-bottom-nav />
+</div>

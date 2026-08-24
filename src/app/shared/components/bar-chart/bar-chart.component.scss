@@ -1,0 +1,117 @@
+.bar-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.legend {
+  display: flex;
+  gap: 18px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.dot.bruto {
+  background: var(--brand-purple);
+}
+.dot.liquido {
+  background: var(--brand-blue);
+}
+
+.chart-area {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  height: 220px;
+  padding: 8px 4px 0;
+  border-bottom: 1px solid var(--border);
+  background-image: repeating-linear-gradient(
+    to top,
+    var(--border) 0,
+    var(--border) 1px,
+    transparent 1px,
+    transparent 25%
+  );
+  background-size: 100% 100%;
+  overflow-x: auto;
+}
+
+.column {
+  flex: 1;
+  min-width: 34px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  position: relative;
+  gap: 8px;
+}
+
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+}
+
+.bar {
+  width: 10px;
+  border-radius: 4px 4px 0 0;
+  min-height: 2px;
+  transition: height 0.2s ease;
+}
+.bar.bruto {
+  background: linear-gradient(180deg, var(--brand-purple-light), var(--brand-purple));
+}
+.bar.liquido {
+  background: linear-gradient(180deg, var(--brand-blue-light), var(--brand-blue));
+}
+
+.month-label {
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--ink-faint);
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  margin-bottom: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: 0.74rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  white-space: nowrap;
+  z-index: 5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.tooltip strong {
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+
+.tooltip span {
+  color: var(--ink-soft);
+}

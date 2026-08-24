@@ -1,0 +1,71 @@
+<div class="diary-screen">
+  <header class="hero">
+    <div class="hero-top">
+      <button class="icon-btn" (click)="voltar()">
+        <lucide-angular [img]="icons.ArrowLeft" [size]="18" />
+      </button>
+      <div>
+        <h1>Diário de Hoje</h1>
+        <p class="capitalize">{{ hoje }}</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+    <section class="card">
+      <h2>Como você se sentiu hoje?</h2>
+      <div class="mood-row">
+        @for (m of moods; track m.valor) {
+          <button
+            type="button"
+            class="mood-btn"
+            [class.selected]="mood() === m.valor"
+            (click)="mood.set(m.valor)"
+          >
+            <span class="emoji">{{ m.emoji }}</span>
+            <span class="label">{{ m.label }}</span>
+          </button>
+        }
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-title">
+        <lucide-angular [img]="icons.Smile" [size]="18" class="c-success" />
+        <h2>Pontos Positivos do Dia</h2>
+      </div>
+      <textarea
+        [ngModel]="positivos()"
+        (ngModelChange)="positivos.set($event)"
+        placeholder="O que aconteceu de bom hoje? Quais momentos te deixaram feliz?"
+      ></textarea>
+    </section>
+
+    <section class="card">
+      <div class="card-title">
+        <lucide-angular [img]="icons.Frown" [size]="18" class="c-warning" />
+        <h2>Desafios e Dificuldades</h2>
+      </div>
+      <textarea
+        [ngModel]="negativos()"
+        (ngModelChange)="negativos.set($event)"
+        placeholder="O que te incomodou hoje? Houve algum momento difícil?"
+      ></textarea>
+    </section>
+
+    @if (erro()) {
+      <div class="error-banner">{{ erro() }}</div>
+    }
+
+    <button
+      type="button"
+      class="save-btn"
+      [class.done]="salvo()"
+      [disabled]="!mood() || salvo() || salvando()"
+      (click)="salvar()"
+    >
+      <lucide-angular [img]="icons.Save" [size]="18" />
+      <span>{{ salvo() ? 'Diário Salvo!' : salvando() ? 'Salvando…' : 'Salvar Diário' }}</span>
+    </button>
+  </div>
+</div>

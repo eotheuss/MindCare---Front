@@ -1,0 +1,66 @@
+<div class="reports-screen">
+  <header class="hero">
+    <button class="icon-btn" (click)="voltar()">
+      <lucide-angular [img]="icons.ArrowLeft" [size]="18" />
+    </button>
+    <div>
+      <h1>Relatórios Semanais</h1>
+      <p>Análises da IA e orientações</p>
+    </div>
+  </header>
+
+  <div class="content">
+    @if (carregando()) {
+      <p class="status-text">Carregando…</p>
+    } @else if (erro()) {
+      <p class="status-text error">{{ erro() }}</p>
+    } @else if (relatorios().length === 0) {
+      <p class="status-text">
+        Nenhum relatório semanal ainda. Eles são gerados pelo seu profissional a partir dos registros do diário.
+      </p>
+    } @else {
+      @for (relatorio of relatorios(); track $index) {
+        <div class="report-card">
+          <div class="report-header">
+            <span class="period">
+              <lucide-angular [img]="icons.Calendar" [size]="16" />
+              {{ formatarPeriodo(relatorio.faixaDeDatas) }}
+            </span>
+            <lucide-angular [img]="icons.FileText" [size]="16" />
+          </div>
+
+          <div class="report-body">
+            <div>
+              <h3>Resumo da Semana</h3>
+              <p class="muted">{{ relatorio.resumo || relatorio.observacoes }}</p>
+            </div>
+
+            <div class="stats-row">
+              <div class="stat positive">
+                <span class="stat-label"><lucide-angular [img]="icons.TrendingUp" [size]="14" />Positivos</span>
+                <span class="stat-value">{{ relatorio.totalPositivos }}</span>
+              </div>
+              <div class="stat negative">
+                <span class="stat-label"><lucide-angular [img]="icons.TrendingDown" [size]="14" />Desafios</span>
+                <span class="stat-value">{{ relatorio.totalNegativos }}</span>
+              </div>
+            </div>
+
+            @if (relatorio.relatorioIA) {
+              <div class="ai-box">
+                <h4>Observações do profissional</h4>
+                <p>{{ relatorio.relatorioIA }}</p>
+                @if (relatorio.recomendacoes) {
+                  <div class="recommendation">
+                    <span class="rec-label">Recomendação:</span>
+                    <p>{{ relatorio.recomendacoes }}</p>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>

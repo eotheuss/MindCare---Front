@@ -1,0 +1,72 @@
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent-color, var(--brand-blue));
+  border-radius: var(--radius-card);
+  padding: 20px;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.15s ease;
+  min-width: 0;
+}
+
+.stat-card:hover {
+  box-shadow: var(--shadow-card-hover);
+}
+
+.icon-chip {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--accent-bg, var(--brand-blue-pale));
+  color: var(--accent-color, var(--brand-blue));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+}
+
+.label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  margin: 2px 0 0;
+}
+
+.hint {
+  font-size: 0.75rem;
+  color: var(--ink-faint);
+  margin: 4px 0 0;
+}
+
+.accent-blue {
+  --accent-color: var(--brand-blue);
+  --accent-bg: var(--brand-blue-pale);
+}
+.accent-purple {
+  --accent-color: var(--brand-purple);
+  --accent-bg: var(--brand-purple-pale);
+}
+.accent-teal {
+  --accent-color: var(--teal);
+  --accent-bg: var(--teal-bg);
+}
+.accent-pink {
+  --accent-color: var(--pink);
+  --accent-bg: var(--pink-bg);
+}
+.accent-orange {
+  --accent-color: var(--warning);
+  --accent-bg: var(--warning-bg);
+}
+.accent-green {
+  --accent-color: var(--success);
+  --accent-bg: var(--success-bg);
+}

@@ -1,0 +1,62 @@
+<div class="app-shell">
+  @if (sidebarOpen()) {
+    <div class="backdrop" (click)="closeSidebar()"></div>
+  }
+
+  <aside class="sidebar" [class.open]="sidebarOpen()">
+    <div class="brand">
+      <div class="brand-icon">
+        <lucide-angular [img]="icons.Activity" [size]="20" />
+      </div>
+      <div>
+        <p class="brand-name">MindCare Diary</p>
+        <p class="brand-sub">Painel Admin</p>
+      </div>
+    </div>
+
+    <nav>
+      @for (item of navItems; track item.route) {
+        <a
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          class="nav-link"
+          (click)="closeSidebar()"
+        >
+          <lucide-angular [img]="item.icon" [size]="18" />
+          {{ item.label }}
+        </a>
+      }
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="logout" (click)="sair()">
+        <lucide-angular [img]="icons.LogOut" [size]="18" />
+        Sair
+      </button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-btn" (click)="toggleSidebar()">
+          <lucide-angular [img]="icons.Menu" [size]="20" />
+        </button>
+        <div>
+          <h1>Painel Administrativo</h1>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="user-info">
+          <p class="user-name">{{ auth.nomeUsuario() || 'Administrador' }}</p>
+          <p class="user-role">Admin da clínica</p>
+        </div>
+        <div class="avatar">{{ iniciais() }}</div>
+      </div>
+    </header>
+
+    <main class="content">
+      <router-outlet />
+    </main>
+  </div>
+</div>

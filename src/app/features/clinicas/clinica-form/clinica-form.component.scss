@@ -1,0 +1,330 @@
+.clinica-form-page {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 780px;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.header-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--brand-blue-pale);
+  color: var(--brand-blue-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.page-header h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.page-header p {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  margin: 2px 0 0;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 22px;
+}
+
+.card h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.card-sub {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  margin: 4px 0 16px;
+}
+
+.card-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.count-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--brand-blue-pale);
+  color: var(--brand-blue-deep);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  flex: none;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.field-grid.three {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.field-grid:last-child {
+  margin-bottom: 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.field input,
+.field select {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 0.88rem;
+  outline: none;
+  width: 100%;
+}
+.field input:focus,
+.field select:focus {
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 18%, transparent);
+}
+
+.profissionais-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.prof-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.prof-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.prof-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.remove-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: var(--danger);
+  font-size: 0.74rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+.remove-btn:hover {
+  background: var(--danger-bg);
+}
+
+.add-btn {
+  margin-top: 14px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--brand-blue-pale);
+  color: var(--brand-blue-deep);
+  border: 1.5px dashed color-mix(in srgb, var(--brand-blue-deep) 40%, transparent);
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.add-btn:hover {
+  background: color-mix(in srgb, var(--brand-blue-pale) 70%, var(--brand-blue) 6%);
+}
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.plan-card {
+  text-align: left;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 16px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: border-color 0.15s ease, transform 0.1s ease;
+}
+.plan-card:hover {
+  transform: translateY(-1px);
+}
+
+.plan-name {
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--ink);
+}
+
+.plan-desc {
+  font-size: 0.76rem;
+  color: var(--ink-soft);
+  line-height: 1.45;
+}
+
+.plan-card.selected {
+  border-color: transparent;
+  color: #fff;
+}
+.plan-card.selected .plan-name,
+.plan-card.selected .plan-desc {
+  color: #fff;
+}
+
+.plan-card.plan-basico.selected {
+  background: linear-gradient(135deg, var(--brand-blue-light), var(--brand-blue));
+}
+.plan-card.plan-profissional.selected {
+  background: linear-gradient(135deg, var(--brand-purple-light), var(--brand-purple));
+}
+.plan-card.plan-clinica.selected {
+  background: linear-gradient(135deg, var(--brand-blue-deep), var(--brand-indigo));
+}
+
+.taxa-field {
+  max-width: 320px;
+}
+
+.taxa-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.taxa-input input {
+  width: 90px;
+  flex: none;
+}
+.taxa-suffix {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.hint {
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  margin: 6px 0 0;
+}
+
+.backend-note {
+  background: var(--warning-bg);
+  border: 1px dashed var(--warning-border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+.backend-note strong {
+  color: var(--warning);
+}
+.backend-note code {
+  background: var(--surface-2);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+.success-banner {
+  background: var(--success-bg);
+  border: 1px solid var(--success-border);
+  color: var(--success);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.error-banner {
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  color: var(--danger);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.submit-btn {
+  background: linear-gradient(90deg, var(--brand-blue-deep), var(--brand-indigo));
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+@media (max-width: 700px) {
+  .field-grid,
+  .field-grid.three {
+    grid-template-columns: 1fr;
+  }
+  .plans-grid {
+    grid-template-columns: 1fr;
+  }
+}

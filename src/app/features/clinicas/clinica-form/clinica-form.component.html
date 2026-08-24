@@ -1,0 +1,162 @@
+<div class="clinica-form-page">
+  <div class="page-header">
+    <div class="header-icon">
+      <lucide-angular [img]="icons.Building2" [size]="20" />
+    </div>
+    <div>
+      <h1>Nova clínica</h1>
+      <p>Cadastre os dados da clínica, adicione os profissionais e escolha o plano de assinatura.</p>
+    </div>
+  </div>
+
+  @if (sucesso()) {
+    <div class="success-banner">Clínica cadastrada com sucesso! Redirecionando para o dashboard…</div>
+  }
+  @if (erro()) {
+    <div class="error-banner">{{ erro() }}</div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <section class="card">
+      <h2>1. Dados da clínica</h2>
+      <p class="card-sub">Informações principais para identificar a clínica na plataforma.</p>
+
+      <div class="field-grid">
+        <div class="field">
+          <label for="nome">Nome da clínica</label>
+          <input id="nome" type="text" formControlName="nome" placeholder="Ex.: Clínica Vida Plena" />
+        </div>
+        <div class="field">
+          <label for="endereco">Endereço</label>
+          <input id="endereco" type="text" formControlName="endereco" placeholder="Rua, número, bairro, cidade" />
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-header-row">
+        <div>
+          <h2>2. Profissionais</h2>
+          <p class="card-sub">Adicione cada profissional vinculado à clínica com seu registro (CRP/CRM).</p>
+        </div>
+        <span class="count-chip">
+          <lucide-angular [img]="icons.Users" [size]="14" />
+          {{ profissionaisArray.length }}
+        </span>
+      </div>
+
+      <div formArrayName="profissionais" class="profissionais-list">
+        @for (grupo of profissionaisArray.controls; track $index) {
+          <div class="prof-card" [formGroupName]="$index">
+            <div class="prof-card-header">
+              <span class="prof-tag">Profissional {{ $index + 1 }}</span>
+              @if (profissionaisArray.length > 1) {
+                <button type="button" class="remove-btn" (click)="removerProfissional($index)">
+                  <lucide-angular [img]="icons.Trash2" [size]="14" />
+                  Remover
+                </button>
+              }
+            </div>
+
+            <div class="field-grid">
+              <div class="field">
+                <label>Nome completo</label>
+                <input type="text" formControlName="nomeCompleto" placeholder="Ex.: Ana Beatriz Souza" />
+              </div>
+              <div class="field">
+                <label>Nome de usuário (login)</label>
+                <input type="text" formControlName="nomeUsuario" placeholder="ana.souza" />
+              </div>
+            </div>
+
+            <div class="field-grid">
+              <div class="field">
+                <label>Senha inicial</label>
+                <input type="password" formControlName="senha" placeholder="mín. 6 caracteres" />
+              </div>
+              <div class="field">
+                <label>Data de nascimento</label>
+                <input type="date" formControlName="dataNascimento" />
+              </div>
+            </div>
+
+            <div class="field-grid three">
+              <div class="field">
+                <label>Gênero</label>
+                <select formControlName="genero">
+                  <option value="FEMININO">Feminino</option>
+                  <option value="MASCULINO">Masculino</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Tipo</label>
+                <select formControlName="tipoProfissional">
+                  @for (tipo of tiposProfissional; track tipo.valor) {
+                    <option [value]="tipo.valor">{{ tipo.label }}</option>
+                  }
+                </select>
+              </div>
+              <div class="field">
+                <label>Nº de registro (CRP/CRM)</label>
+                <input type="text" formControlName="registroProfissional" placeholder="Ex.: CRP 06/123456" />
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <button type="button" class="add-btn" (click)="adicionarProfissional()">
+        <lucide-angular [img]="icons.Plus" [size]="16" />
+        Adicionar profissional
+      </button>
+    </section>
+
+    <section class="card">
+      <h2>3. Plano de assinatura</h2>
+      <p class="card-sub">Escolha o plano que a clínica vai assinar na plataforma.</p>
+
+      <div class="plans-grid">
+        @for (plano of planos; track plano.valor) {
+          <button
+            type="button"
+            class="plan-card"
+            [class]="'plan-' + plano.valor.toLowerCase()"
+            [class.selected]="form.value.planoAssinatura === plano.valor"
+            (click)="selecionarPlano(plano.valor)"
+          >
+            <span class="plan-name">{{ plano.label }}</span>
+            <span class="plan-desc">{{ plano.descricao }}</span>
+          </button>
+        }
+      </div>
+
+      <div class="field taxa-field">
+        <label for="taxaComissao">Taxa de comissão da plataforma</label>
+        <div class="taxa-input">
+          <input
+            id="taxaComissao"
+            type="number"
+            step="0.01"
+            min="0"
+            max="1"
+            formControlName="taxaComissao"
+          />
+          <span class="taxa-suffix">
+            = {{ (form.value.taxaComissao ?? 0) * 100 | number: '1.0-0' }}% sobre o faturamento
+          </span>
+        </div>
+        <p class="hint">Sugerida automaticamente pelo plano escolhido; pode ser ajustada manualmente.</p>
+      </div>
+    </section>
+
+    <div class="backend-note">
+      <strong>Nota técnica:</strong> a API atual (<code>POST /clinicas</code>) não retorna o ID da clínica criada
+      e o mapeamento de profissionais aninhados no cadastro ainda não faz a ligação correta com a clínica no banco.
+      Isso é uma limitação do backend, não do formulário — sinalizado para o time ajustar.
+    </div>
+
+    <button type="submit" class="submit-btn" [disabled]="enviando()">
+      {{ enviando() ? 'Cadastrando…' : 'Cadastrar clínica' }}
+    </button>
+  </form>
+</div>

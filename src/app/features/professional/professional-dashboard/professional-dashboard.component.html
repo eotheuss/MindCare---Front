@@ -1,0 +1,68 @@
+<div class="prof-screen">
+  <header class="hero">
+    <div class="hero-top">
+      <div>
+        <h1>Painel Profissional</h1>
+        <p>Acompanhe seus pacientes</p>
+      </div>
+      <button class="icon-btn" (click)="sair()">
+        <lucide-angular [img]="icons.LogOut" [size]="18" />
+      </button>
+    </div>
+
+    <div class="search-box">
+      <lucide-angular [img]="icons.Search" [size]="18" class="search-icon" />
+      <input
+        type="text"
+        placeholder="Buscar paciente..."
+        [ngModel]="busca()"
+        (ngModelChange)="busca.set($event)"
+      />
+    </div>
+  </header>
+
+  <div class="stats-row">
+    <div class="stat-box">
+      <span class="stat-label"><lucide-angular [img]="icons.Users" [size]="16" />Total</span>
+      <p class="stat-value">{{ pacientes().length }}</p>
+      <p class="stat-sub">Pacientes ativos</p>
+    </div>
+    <div class="stat-box">
+      <span class="stat-label warn"><lucide-angular [img]="icons.AlertCircle" [size]="16" />Atenção</span>
+      <p class="stat-value">{{ totalPrecisamAtencao() }}</p>
+      <p class="stat-sub">Precisam de atenção</p>
+    </div>
+  </div>
+
+  <section class="content">
+    <h2>Meus Pacientes</h2>
+
+    @if (carregando()) {
+      <p class="status-text">Carregando…</p>
+    } @else if (erro()) {
+      <p class="status-text error">{{ erro() }}</p>
+    } @else if (pacientesFiltrados().length === 0) {
+      <p class="status-text">Nenhum paciente encontrado.</p>
+    } @else {
+      <div class="patient-list">
+        @for (p of pacientesFiltrados(); track p.nomeUsuario) {
+          <a class="patient-card" [routerLink]="['/profissional/pacientes', p.nomeUsuario]">
+            <div class="avatar">{{ iniciais(p.nomeCompleto) }}</div>
+            <div class="patient-info">
+              <div class="name-row">
+                <h3>{{ p.nomeCompleto }}</h3>
+                @if (p.estadoPaciente === 'ATENCAO') {
+                  <lucide-angular [img]="icons.AlertCircle" [size]="15" class="alert-icon" />
+                }
+              </div>
+              <span class="estado-chip" [class]="'estado-' + (p.estadoPaciente || '').toLowerCase()">
+                {{ estadoLabel(p.estadoPaciente) }}
+              </span>
+            </div>
+            <lucide-angular [img]="icons.TrendingUp" [size]="18" class="chevron" />
+          </a>
+        }
+      </div>
+    }
+  </section>
+</div>

@@ -1,0 +1,90 @@
+<div class="dashboard">
+  <div class="lookup-card">
+    <div class="lookup-title">
+      <lucide-angular [img]="icons.Building2" [size]="18" />
+      <div>
+        <h2>Selecionar clínica</h2>
+        <p>A API não expõe uma listagem de clínicas — informe o ID manualmente.</p>
+      </div>
+    </div>
+
+    <div class="lookup-fields">
+      <div class="field">
+        <label for="clinicaId">ID da clínica</label>
+        <input
+          id="clinicaId"
+          type="number"
+          min="1"
+          [ngModel]="clinicaId()"
+          (ngModelChange)="clinicaId.set($event)"
+          placeholder="Ex.: 1"
+        />
+      </div>
+      <div class="field">
+        <label for="ano">Ano</label>
+        <input id="ano" type="number" [ngModel]="ano()" (ngModelChange)="ano.set($event)" />
+      </div>
+      <button class="load-btn" (click)="carregar()" [disabled]="loading()">
+        {{ loading() ? 'Carregando…' : 'Carregar' }}
+      </button>
+    </div>
+  </div>
+
+  @if (erro()) {
+    <div class="error-banner">{{ erro() }}</div>
+  }
+
+  @if (carregado()) {
+    <div class="clinic-title-row">
+      <h1>{{ nomeClinica() }}</h1>
+      <span class="plan-chip">Plano {{ planoAssinatura() }}</span>
+    </div>
+
+    <section class="stats-grid">
+      <app-stat-card
+        [icon]="icons.DollarSign"
+        label="Faturamento do mês"
+        [value]="formatCurrency(faturamentoMesAtual())"
+        hint="Antes do desconto de comissão"
+        accent="purple"
+      />
+      <app-stat-card
+        [icon]="icons.TrendingUp"
+        label="Receita do mês"
+        [value]="formatCurrency(receitaMesAtual())"
+        hint="Valor líquido para a MindCare"
+        accent="blue"
+      />
+      <app-stat-card
+        [icon]="icons.Users"
+        label="Pacientes"
+        [value]="totalPacientes().toString()"
+        hint="Vinculados à clínica"
+        accent="teal"
+      />
+      <app-stat-card
+        [icon]="icons.UserCheck"
+        label="Profissionais"
+        [value]="totalProfissionais().toString()"
+        hint="Vinculados à clínica"
+        accent="pink"
+      />
+    </section>
+
+    <section class="chart-card">
+      <div class="chart-header">
+        <div>
+          <h3>Faturamento x receita — {{ ano() }}</h3>
+          <p>Comparativo mensal, bruto e líquido</p>
+        </div>
+        <div class="totals">
+          <span>Total bruto <strong>{{ formatCurrency(faturamentoAnoTotal()) }}</strong></span>
+          <span>Total líquido <strong>{{ formatCurrency(receitaAnoTotal()) }}</strong></span>
+        </div>
+      </div>
+      <app-bar-chart [data]="serieMensal()" />
+    </section>
+  } @else if (!loading()) {
+    <div class="empty-state">Informe o ID de uma clínica e clique em "Carregar" para ver os dados.</div>
+  }
+</div>

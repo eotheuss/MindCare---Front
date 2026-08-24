@@ -1,0 +1,10 @@
+<div class="stat-card" [class]="'accent-' + accent">
+  <div class="icon-chip">
+    <lucide-angular [img]="icon" [size]="20" />
+  </div>
+  <p class="value">{{ value }}</p>
+  <p class="label">{{ label }}</p>
+  @if (hint) {
+    <p class="hint">{{ hint }}</p>
+  }
+</div>

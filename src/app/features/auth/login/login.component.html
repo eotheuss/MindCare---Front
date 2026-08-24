@@ -1,0 +1,33 @@
+<div class="login-screen">
+  <div class="login-intro">
+    <div class="logo-mark">MC</div>
+    <h1>MindCare Diary</h1>
+    <p>Cuidando da sua saúde mental com carinho</p>
+  </div>
+
+  <div class="login-card">
+    <h2>Entrar na sua conta</h2>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="field">
+        <label for="nomeUsuario">Usuário</label>
+        <input id="nomeUsuario" type="text" formControlName="nomeUsuario" autocomplete="username" />
+      </div>
+
+      <div class="field">
+        <label for="senha">Senha</label>
+        <input id="senha" type="password" formControlName="senha" autocomplete="current-password" />
+      </div>
+
+      @if (errorMessage()) {
+        <div class="error-banner">{{ errorMessage() }}</div>
+      }
+
+      <button type="submit" class="submit-btn" [disabled]="loading()">
+        {{ loading() ? 'Entrando…' : 'Entrar' }}
+      </button>
+    </form>
+  </div>
+
+  <p class="demo-note">Pacientes, profissionais e administradores usam o mesmo acesso</p>
+</div>
