@@ -131,7 +131,6 @@ export class ClinicaFormComponent {
 
     if(profissionaisDTO.length > 0) {
       profissionaisDTO.map((dto) => {
-        dto.clinicas?.push()
         this.profissionalService.cadastrar(dto).subscribe();
       })
     }
