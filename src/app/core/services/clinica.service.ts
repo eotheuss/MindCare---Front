@@ -13,6 +13,12 @@ export class ClinicaService {
 
   constructor(private http: HttpClient) {}
 
+  buscarPorId(clinicaId: number): Observable<ClinicaDTO> {
+    return this.http.get<ClinicaDTO>(`${this.baseUrl}/${clinicaId}`);
+  }
+
+  // A API ainda não expõe estes dois endpoints (não existem em mindcare-diary@master) —
+  // deixados aqui prontos para quando o backend passar a suportar busca por CNPJ/nome.
   buscarPorCnpj(clinicaCnpj: string): Observable<ClinicaDTO> {
     return this.http.get<ClinicaDTO>(`${this.baseUrl}/${clinicaCnpj}/cnpj`);
   }
@@ -21,28 +27,28 @@ export class ClinicaService {
     return this.http.get<ClinicaDTO>(`${this.baseUrl}/${nome}/nome`);
   }
 
-  buscarPacientes(clinicaCnpj: string): Observable<PacienteDTO[]> {
-    return this.http.get<PacienteDTO[]>(`${this.baseUrl}/${clinicaCnpj}/pacientes`);
+  buscarPacientes(clinicaId: number): Observable<PacienteDTO[]> {
+    return this.http.get<PacienteDTO[]>(`${this.baseUrl}/${clinicaId}/pacientes`);
   }
 
-  buscarProfissionais(clinicaCnpj: string): Observable<ProfissionalDTO[]> {
-    return this.http.get<ProfissionalDTO[]>(`${this.baseUrl}/${clinicaCnpj}/profissionais`);
+  buscarProfissionais(clinicaId: number): Observable<ProfissionalDTO[]> {
+    return this.http.get<ProfissionalDTO[]>(`${this.baseUrl}/${clinicaId}/profissionais`);
   }
 
-  buscarConsultas(clinicaCnpj: string): Observable<ConsultaDTO[]> {
-    return this.http.get<ConsultaDTO[]>(`${this.baseUrl}/${clinicaCnpj}/consultas`);
+  buscarConsultas(clinicaId: number): Observable<ConsultaDTO[]> {
+    return this.http.get<ConsultaDTO[]>(`${this.baseUrl}/${clinicaId}/consultas`);
   }
 
   /** Faturamento bruto (antes do desconto de comissão) de um mês/ano específico. */
-  buscarFaturamento(clinicaCnpj: string, ano: number, mes: number): Observable<number> {
-    return this.http.get<number>(`${this.baseUrl}/${clinicaCnpj}/faturamento`, {
+  buscarFaturamento(clinicaId: number, ano: number, mes: number): Observable<number> {
+    return this.http.get<number>(`${this.baseUrl}/${clinicaId}/faturamento`, {
       params: { ano, mes },
     });
   }
 
   /** Receita líquida (após desconto de comissão) de um mês/ano específico. */
-  buscarReceitaAposDescontos(clinicaCnpj: string, ano: number, mes: number): Observable<number> {
-    return this.http.get<number>(`${this.baseUrl}/${clinicaCnpj}/receita/descontos`, {
+  buscarReceitaAposDescontos(clinicaId: number, ano: number, mes: number): Observable<number> {
+    return this.http.get<number>(`${this.baseUrl}/${clinicaId}/receita/descontos`, {
       params: { ano, mes },
     });
   }
@@ -51,7 +57,7 @@ export class ClinicaService {
     return this.http.post<void>(this.baseUrl, clinica);
   }
 
-  atualizar(clinicaCnpj: string, clinica: ClinicaDTO): Observable<void> {
-    return this.http.patch<void>(`${this.baseUrl}/${clinicaCnpj}`, clinica);
+  atualizar(clinicaId: number, clinica: ClinicaDTO): Observable<void> {
+    return this.http.patch<void>(`${this.baseUrl}/${clinicaId}`, clinica);
   }
 }

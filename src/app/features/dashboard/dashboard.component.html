@@ -10,14 +10,14 @@
 
     <div class="lookup-fields">
       <div class="field">
-        <label for="clinicaCnpj">CNPJ da clínica</label>
+        <label for="clinicaId">ID da clínica</label>
         <input
-          id="clinicaCnpj"
-          type="string"
-          min="14"
-          [ngModel]="clinicaCnpj()"
-          (ngModelChange)="clinicaCnpj.set($event)"
-          placeholder="Ex.: 12345678/0001-91"
+          id="clinicaId"
+          type="number"
+          min="1"
+          [ngModel]="clinicaId()"
+          (ngModelChange)="clinicaId.set($event)"
+          placeholder="Ex.: 1"
         />
       </div>
       <div class="field">
