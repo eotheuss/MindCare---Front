@@ -93,17 +93,7 @@ export class ClinicaFormComponent {
 
     const valores = this.form.getRawValue();
 
-    const profissionaisDTO: ProfissionalDTO[] = valores.profissionais.map((p) => ({
-      nomeUsuario: p.nomeUsuario!,
-      senha: p.senha!,
-      nomeCompleto: p.nomeCompleto!,
-      dataNascimento: p.dataNascimento!,
-      genero: p.genero!,
-      ativo: true,
-      userRole: UserRole.PROFISSIONAL,
-      tipoProfissional: p.tipoProfissional!,
-      registroProfissional: p.registroProfissional!,
-    }));
+    
 
     this.clinicaService.cadastrar({
       nome: valores.nome!,
@@ -129,11 +119,23 @@ export class ClinicaFormComponent {
       return of(null);
     })
 
-    if(profissionaisDTO.length > 0) {
-      profissionaisDTO.map((dto) => {
-        this.profissionalService.cadastrar(dto).subscribe();
-      })
-    }
+    var clinica = this.clinicaService.buscarPorCnpj(valores.cnpj!).subscribe()
 
+    const profissionaisDTO: ProfissionalDTO[] = valores.profissionais.map((p) => ({
+      nomeUsuario: p.nomeUsuario!,
+      senha: p.senha!,
+      nomeCompleto: p.nomeCompleto!,
+      dataNascimento: p.dataNascimento!,
+      genero: p.genero!,
+      ativo: true,
+      userRole: UserRole.PROFISSIONAL,
+      tipoProfissional: p.tipoProfissional!,
+      registroProfissional: p.registroProfissional!,
+      clinica: clinica
+    }));
+
+    profissionaisDTO.map((dto) => {
+      this.profissionalService.cadastrar(dto).subscribe();
+    })
   }
 }

@@ -8,5 +8,5 @@ export interface ProfissionalDTO extends UsuarioDTO {
   modalidades?: string[];
   pacientes?: unknown[];
   consultas?: unknown[];
-  clinicas?: unknown[];
+  clinica?: unknown;
 }
