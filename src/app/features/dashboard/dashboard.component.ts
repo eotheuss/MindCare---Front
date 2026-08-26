@@ -61,7 +61,15 @@ export class DashboardComponent {
     this.loading.set(true);
     this.erro.set(null);
 
-    this.clinicaService.buscarPorNome(nome).subscribe((resultado) => {
+    this.clinicaService.buscarPorNome(nome).pipe(
+      catchError(() => {
+        this.erro.set(
+          'Não foi possível carregar a clínica. Verifique o ID e se a API está rodando em localhost:8080.'
+        );
+        return of(null);
+      })
+    )
+    .subscribe((resultado) => {
       if (!resultado) {
         this.loading.set(false);
         return;
@@ -74,11 +82,12 @@ export class DashboardComponent {
 
       this.carregarSerieMensal(resultado.cnpj);
     });
-
+  
   }
 
   private carregarSerieMensal(clinicaCnpj: string): void {
     console.log("cnpj", clinicaCnpj);
+ 
     const ano = this.ano();
     const chamadasPorMes = Array.from({ length: 12 }, (_, indice) => {
       const mes = indice + 1;
