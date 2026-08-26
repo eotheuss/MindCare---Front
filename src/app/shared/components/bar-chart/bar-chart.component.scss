@@ -86,10 +86,6 @@
 .tooltip {
   position: absolute;
 
-  /*
-   * O tooltip fica acima das barras,
-   * independentemente da altura delas.
-   */
   bottom: 75px;
   left: 50%;
   transform: translateX(-50%);
@@ -111,10 +107,6 @@
 
   color: #374151;
 
-  /*
-   * Importante para o tooltip não desaparecer
-   * quando o mouse passa sobre ele.
-   */
   pointer-events: none;
 
   white-space: nowrap;
