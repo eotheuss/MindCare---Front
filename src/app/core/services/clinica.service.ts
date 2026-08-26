@@ -35,15 +35,15 @@ export class ClinicaService {
 
   /** Faturamento bruto (antes do desconto de comissão) de um mês/ano específico. */
   buscarFaturamento(clinicaCnpj: string, ano: number, mes: number): Observable<number> {
-    return this.http.get<number>(`${this.baseUrl}/${clinicaCnpj}/faturamento`, {
-      params: { ano, mes },
+    return this.http.get<number>(`${this.baseUrl}/faturamento`, {
+      params: { clinicaCnpj, ano, mes },
     });
   }
 
   /** Receita líquida (após desconto de comissão) de um mês/ano específico. */
   buscarReceitaAposDescontos(clinicaCnpj: string, ano: number, mes: number): Observable<number> {
-    return this.http.get<number>(`${this.baseUrl}/${clinicaCnpj}/receita/descontos`, {
-      params: { ano, mes },
+    return this.http.get<number>(`${this.baseUrl}/receita/descontos`, {
+      params: { clinicaCnpj, ano, mes },
     });
   }
 

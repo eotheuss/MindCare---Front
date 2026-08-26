@@ -3,8 +3,6 @@ import { Component, signal } from '@angular/core';
 import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LucideAngularModule, Building2, Plus, Trash2, Users } from 'lucide-angular';
-import { forkJoin, of } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
 import { ClinicaService } from '../../../core/services/clinica.service';
 import { ProfissionalService } from '../../../core/services/profissional.service';
 import { PLANOS_ASSINATURA, PlanoAssinatura, Sexo, TIPOS_PROFISSIONAL, TipoProfissional, UserRole } from '../../../core/models/enums';
@@ -112,35 +110,10 @@ export class ClinicaFormComponent {
         endereco: valores.endereco!,
         taxaComissao: valores.taxaComissao!,
         planoAssinatura: valores.planoAssinatura!,
-        profissionais: [],
+        profissionais: profissionaisDTO,
         pacientes: [],
         consultas: [],
       })
-      .pipe(
-        switchMap(() =>
-          this.clinicaService.buscarPorCnpj(valores.cnpj!)
-        ),
-
-        switchMap((clinica) =>
-          forkJoin(
-            profissionaisDTO.map((dto) => {
-              dto.clinica = clinica;
-
-              return this.profissionalService.cadastrar(dto);
-            })
-          )
-        ),
-
-        catchError((err) => {
-          this.erro.set(
-            err?.status === 0
-              ? 'Não foi possível conectar à API em localhost:8080. Verifique se o backend está rodando.'
-              : 'Não foi possível concluir o cadastro.'
-          );
-
-          return of(null);
-        })
-      )
       .subscribe((resultado) => {
         this.enviando.set(false);
 

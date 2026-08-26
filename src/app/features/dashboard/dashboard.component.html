@@ -4,7 +4,7 @@
       <lucide-angular [img]="icons.Building2" [size]="18" />
       <div>
         <h2>Selecionar clínica</h2>
-        <p>A API não expõe uma listagem de clínicas — informe o ID manualmente.</p>
+        <p>Informe o nome da clínica manualmente.</p>
       </div>
     </div>
 
@@ -83,6 +83,6 @@
       <app-bar-chart [data]="serieMensal()" />
     </section>
   } @else if (!loading()) {
-    <div class="empty-state">Informe o ID de uma clínica e clique em "Carregar" para ver os dados.</div>
+    <div class="empty-state">Informe o nome de uma clínica e clique em "Carregar" para ver os dados.</div>
   }
 </div>

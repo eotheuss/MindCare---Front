@@ -69,7 +69,7 @@
               </div>
               <div class="field">
                 <label>Nome de usuário (login)</label>
-                <input type="text" formControlName="nomeUsuario" placeholder="ana.souza" />
+                <input type="text" formControlName="nomeUsuario" placeholder="ana.souza@email.com" />
               </div>
             </div>
 
@@ -152,12 +152,6 @@
         <p class="hint">Sugerida automaticamente pelo plano escolhido; pode ser ajustada manualmente.</p>
       </div>
     </section>
-
-    <div class="backend-note">
-      <strong>Nota técnica:</strong> a API atual (<code>POST /clinicas</code>) não retorna o ID da clínica criada
-      e o mapeamento de profissionais aninhados no cadastro ainda não faz a ligação correta com a clínica no banco.
-      Isso é uma limitação do backend, não do formulário — sinalizado para o time ajustar.
-    </div>
 
     <button type="submit" class="submit-btn" [disabled]="enviando()">
       {{ enviando() ? 'Cadastrando…' : 'Cadastrar clínica' }}

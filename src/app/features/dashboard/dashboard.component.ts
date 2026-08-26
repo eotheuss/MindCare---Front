@@ -86,7 +86,6 @@ export class DashboardComponent {
   }
 
   private carregarSerieMensal(clinicaCnpj: string): void {
-    console.log("cnpj", clinicaCnpj);
  
     const ano = this.ano();
     const chamadasPorMes = Array.from({ length: 12 }, (_, indice) => {
