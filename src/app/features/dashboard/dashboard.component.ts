@@ -26,7 +26,7 @@ export class DashboardComponent {
   readonly anoAtual = new Date().getFullYear();
   readonly mesAtual = new Date().getMonth() + 1;
 
-  clinicaCnpj = signal<string | null>(null);
+  clinicaNome = signal<string | null>('');
   ano = signal<number>(this.anoAtual);
 
   loading = signal(false);
@@ -52,16 +52,16 @@ export class DashboardComponent {
   constructor(private clinicaService: ClinicaService) {}
 
   carregar(): void {
-    const cnpj = this.clinicaCnpj();
-    if (!cnpj) {
-      this.erro.set('Informe o CNPJ da clínica.');
+    const nome = this.clinicaNome();
+    if (!nome) {
+      this.erro.set('Informe o nome da clínica.');
       return;
     }
 
     this.loading.set(true);
     this.erro.set(null);
 
-    this.clinicaService.buscarPorNome(cnpj).subscribe((resultado) => {
+    this.clinicaService.buscarPorNome(nome).subscribe((resultado) => {
       if (!resultado) {
         this.loading.set(false);
         return;
@@ -69,15 +69,16 @@ export class DashboardComponent {
 
       this.nomeClinica.set(resultado.nome);
       this.planoAssinatura.set(resultado.planoAssinatura);
-      // this.totalPacientes.set(resultado.pacientes.length);
-      // this.totalProfissionais.set(resultado.profissionais.length);
+      this.totalPacientes.set(resultado.pacientes.length);
+      this.totalProfissionais.set(resultado.profissionais.length);
 
-      this.carregarSerieMensal(cnpj);
+      this.carregarSerieMensal(resultado.cnpj);
     });
 
   }
 
   private carregarSerieMensal(clinicaCnpj: string): void {
+    console.log("cnpj", clinicaCnpj);
     const ano = this.ano();
     const chamadasPorMes = Array.from({ length: 12 }, (_, indice) => {
       const mes = indice + 1;
