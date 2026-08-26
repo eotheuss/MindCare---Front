@@ -1,27 +1,81 @@
-# MindcareFrontend
+# MindCare Diary — Frontend (Angular)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.17.
+Frontend em Angular do MindCare Diary: login, área do paciente (diário, relatórios,
+prescrições, agendamento), área do profissional (lista de pacientes, ficha do
+paciente) e área do administrador (dashboard por clínica, cadastro de clínica).
+Consome a API REST do backend [mindcare-diary](https://github.com/ericaokamura/mindcare-diary).
 
-## Development server
+## Pré-requisitos
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- Node.js 18.13+ (testado com 18.17) e npm
+- O backend [mindcare-diary](https://github.com/ericaokamura/mindcare-diary) rodando localmente na porta `8080`, com PostgreSQL configurado (veja o README daquele repositório)
 
-## Code scaffolding
+## Como subir a aplicação
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```bash
+npm install
+npm start
+```
 
-## Build
+A aplicação sobe em [http://localhost:4200](http://localhost:4200).
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Por padrão, o frontend chama a API em `http://localhost:8080` (veja
+[`src/app/core/constants/api.constants.ts`](src/app/core/constants/api.constants.ts)).
 
-## Running unit tests
+### CORS no backend
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+O backend só libera por padrão as origens `http://localhost:5173` e `http://localhost:5174`
+(portas do Vite). Para o Angular (porta `4200`) conseguir chamar a API, é preciso adicionar
+`http://localhost:4200` na lista de `setAllowedOrigins(...)` em
+`SecurityConfiguration.java` do backend e reiniciá-lo.
 
-## Running end-to-end tests
+## Login: o usuário precisa ter `UserRole` = `ADMIN`
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Depois de logado, o app redireciona o usuário de acordo com o `userRole` retornado por
+`POST /login`:
 
-## Further help
+| `userRole`     | Redireciona para  |
+|----------------|--------------------|
+| `ADMIN`        | `/admin/dashboard` |
+| `PROFISSIONAL` | `/profissional`    |
+| `PACIENTE`     | `/paciente/inicio` |
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+O dashboard por clínica e o cadastro de clínicas (as telas do administrador) só ficam
+acessíveis para um usuário com `userRole = ADMIN`. O backend, porém, **não tem hoje um
+endpoint público para criar um usuário administrador** — só existem `POST /profissionais`
+e `POST /pacientes`. Para conseguir um usuário admin para testes:
+
+1. Suba o backend e acesse o Swagger em `http://localhost:8080/swagger-ui/index.html`.
+2. Use o endpoint `POST /profissionais` para cadastrar um usuário qualquer (defina
+   `nomeUsuario` e `senha` à sua escolha).
+3. No banco `mindcare_db`, promova esse usuário a admin:
+
+   ```sql
+   UPDATE usuario SET user_role = 'ADMIN' WHERE nome_usuario = 'seu_usuario_aqui';
+   ```
+
+   (Se os nomes de tabela/coluna estiverem diferentes no seu banco, confira a estrutura
+   real com `\d usuario` no `psql` — o Hibernate está com `ddl-auto=update`.)
+4. Faça login no Angular (`http://localhost:4200/login`) com esse `nomeUsuario`/`senha`.
+
+## Estrutura do projeto
+
+```
+src/app/
+  core/        # models, services HTTP, interceptor de auth, guards de rota/papel
+  layout/      # shell (sidebar) usado pela área do administrador
+  shared/      # componentes reutilizáveis (stat-card, bar-chart, bottom-nav)
+  features/
+    auth/         # tela de login
+    dashboard/     # dashboard por clínica (admin)
+    clinicas/      # cadastro de clínica (admin)
+    patient/       # telas do paciente
+    professional/  # telas do profissional
+```
+
+## Limitações conhecidas do backend
+
+- Não existe endpoint para listar todas as clínicas (`GET /clinicas`) — o dashboard pede
+  o ID da clínica manualmente.
+- `POST /clinicas` não retorna o ID da clínica criada, e o vínculo entre profissional e
+  clínica ainda não é persistido corretamente ao cadastrar uma clínica com profissionais.
