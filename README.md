@@ -24,10 +24,9 @@ Por padrão, o frontend chama a API em `http://localhost:8080` (veja
 
 ### CORS no backend
 
-O backend só libera por padrão as origens `http://localhost:5173` e `http://localhost:5174`
-(portas do Vite). Para o Angular (porta `4200`) conseguir chamar a API, é preciso adicionar
-`http://localhost:4200` na lista de `setAllowedOrigins(...)` em
-`SecurityConfiguration.java` do backend e reiniciá-lo.
+O backend já está configurado para liberar `http://localhost:4200`
+(`setAllowedOrigins(...)` em `SecurityConfiguration.java`). Se aparecer erro de CORS no
+console do navegador, confira se essa configuração não foi revertida.
 
 ## Login: o usuário precisa ter `UserRole` = `ADMIN`
 
@@ -75,7 +74,8 @@ src/app/
 
 ## Limitações conhecidas do backend
 
-- Não existe endpoint para listar todas as clínicas (`GET /clinicas`) — o dashboard pede
-  o ID da clínica manualmente.
-- `POST /clinicas` não retorna o ID da clínica criada, e o vínculo entre profissional e
-  clínica ainda não é persistido corretamente ao cadastrar uma clínica com profissionais.
+- Não existe um endpoint público para criar um usuário `ADMIN` (ver seção de login acima) —
+  o cadastro de clínica só cria profissionais (`userRole = PROFISSIONAL`).
+- O dashboard busca a clínica pelo nome (`GET /clinicas/{nome}/nome`); a busca por CNPJ
+  (`GET /clinicas/{cnpj}/cnpj`) existe mas hoje não retorna pacientes/profissionais
+  vinculados — prefira buscar pelo nome.
