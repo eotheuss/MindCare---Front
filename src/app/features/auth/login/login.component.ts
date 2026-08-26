@@ -49,7 +49,7 @@ export class LoginComponent {
         } else if (err.status === 404) {
           this.errorMessage.set('Usuário não encontrado.');
         } else {
-          this.errorMessage.set('Não foi possível conectar à API. Verifique se o backend está rodando em localhost:8080.');
+          this.errorMessage.set('Não foi possível realizar o login.');
         }
       },
     });

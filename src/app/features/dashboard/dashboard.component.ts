@@ -75,6 +75,8 @@ export class DashboardComponent {
         return;
       }
 
+      console.log("resultado", resultado)
+
       this.nomeClinica.set(resultado.nome);
       this.planoAssinatura.set(resultado.planoAssinatura);
       this.totalPacientes.set(resultado.pacientes.length);
