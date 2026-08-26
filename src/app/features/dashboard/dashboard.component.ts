@@ -64,7 +64,7 @@ export class DashboardComponent {
     this.clinicaService.buscarPorNome(nome).pipe(
       catchError(() => {
         this.erro.set(
-          'Não foi possível carregar a clínica. Verifique o ID e se a API está rodando em localhost:8080.'
+          'Não foi possível carregar a clínica. Verifique o nome da clínica.'
         );
         return of(null);
       })
