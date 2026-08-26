@@ -102,7 +102,7 @@ export class ClinicaFormComponent {
       ativo: true,
       userRole: UserRole.PROFISSIONAL,
       tipoProfissional: p.tipoProfissional!,
-      registroProfissional: p.registroProfissional!,
+      registroProfissional: p.registroProfissional!
     }));
 
     this.clinicaService
@@ -117,22 +117,40 @@ export class ClinicaFormComponent {
         consultas: [],
       })
       .pipe(
-        switchMap(() => forkJoin(profissionaisDTO.map((dto) => this.profissionalService.cadastrar(dto)))),
+        switchMap(() =>
+          this.clinicaService.buscarPorCnpj(valores.cnpj!)
+        ),
+
+        switchMap((clinica) =>
+          forkJoin(
+            profissionaisDTO.map((dto) => {
+              dto.clinica = clinica;
+
+              return this.profissionalService.cadastrar(dto);
+            })
+          )
+        ),
+
         catchError((err) => {
           this.erro.set(
             err?.status === 0
               ? 'Não foi possível conectar à API em localhost:8080. Verifique se o backend está rodando.'
-              : 'Não foi possível concluir o cadastro. Veja a nota abaixo sobre a limitação atual do backend ao vincular profissionais na clínica.'
+              : 'Não foi possível concluir o cadastro.'
           );
+
           return of(null);
         })
       )
       .subscribe((resultado) => {
         this.enviando.set(false);
+
         if (resultado !== null) {
           this.sucesso.set(true);
-          setTimeout(() => this.router.navigate(['/admin/dashboard']), 1500);
+
+          setTimeout(() => {
+            this.router.navigate(['/admin/dashboard']);
+          }, 1500);
         }
       });
-  }
+   }
 }
