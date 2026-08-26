@@ -83,35 +83,63 @@
   background: linear-gradient(180deg, var(--brand-blue-light), var(--brand-blue));
 }
 
-.month-label {
-  font-size: 0.68rem;
-  font-weight: 500;
-  color: var(--ink-faint);
-}
-
 .tooltip {
   position: absolute;
-  bottom: 100%;
-  margin-bottom: 8px;
-  background: var(--surface);
-  color: var(--ink);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 8px 12px;
-  font-size: 0.74rem;
+
+  /*
+   * O tooltip fica acima das barras,
+   * independentemente da altura delas.
+   */
+  bottom: 75px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  z-index: 9999;
+
+  min-width: 180px;
+  padding: 14px 16px;
+
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 6px;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+
+  color: #374151;
+
+  /*
+   * Importante para o tooltip não desaparecer
+   * quando o mouse passa sobre ele.
+   */
+  pointer-events: none;
+
   white-space: nowrap;
-  z-index: 5;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .tooltip strong {
-  color: var(--ink);
-  margin-bottom: 2px;
+  display: block;
+  margin-bottom: 4px;
+
+  color: #1f2937;
+  font-size: 15px;
+  font-weight: 700;
 }
 
 .tooltip span {
-  color: var(--ink-soft);
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.month-label {
+  position: absolute;
+  bottom: -32px;
+
+  color: #9ca3af;
+  font-size: 16px;
+  font-weight: 600;
 }
