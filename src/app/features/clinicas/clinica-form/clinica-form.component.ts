@@ -4,7 +4,6 @@ import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { LucideAngularModule, Building2, Plus, Trash2, Users } from 'lucide-angular';
 import { ClinicaService } from '../../../core/services/clinica.service';
-import { ProfissionalService } from '../../../core/services/profissional.service';
 import { PLANOS_ASSINATURA, PlanoAssinatura, Sexo, TIPOS_PROFISSIONAL, TipoProfissional, UserRole } from '../../../core/models/enums';
 import { ProfissionalDTO } from '../../../core/models/profissional.model';
 
@@ -42,7 +41,6 @@ export class ClinicaFormComponent {
   constructor(
     private fb: FormBuilder,
     private clinicaService: ClinicaService,
-    private profissionalService: ProfissionalService,
     private router: Router
   ) {}
 
