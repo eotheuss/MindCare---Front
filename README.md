@@ -2,7 +2,8 @@
 
 Frontend em Angular do MindCare Diary: login, área do paciente (diário, relatórios,
 prescrições, agendamento), área do profissional (lista de pacientes, ficha do
-paciente) e área do administrador (dashboard por clínica, cadastro de clínica).
+paciente) e área do administrador (dashboard por clínica, cadastro de clínica,
+cadastro de usuários e agenda de consultas da clínica).
 Consome a API REST do backend [mindcare-diary](https://github.com/ericaokamura/mindcare-diary).
 
 ## Pré-requisitos
@@ -39,10 +40,13 @@ Depois de logado, o app redireciona o usuário de acordo com o `userRole` retorn
 | `PROFISSIONAL` | `/profissional`    |
 | `PACIENTE`     | `/paciente/inicio` |
 
-O dashboard por clínica e o cadastro de clínicas (as telas do administrador) só ficam
-acessíveis para um usuário com `userRole = ADMIN`. O backend, porém, **não tem hoje um
-endpoint público para criar um usuário administrador** — só existem `POST /profissionais`
-e `POST /pacientes`. Para conseguir um usuário admin para testes:
+O dashboard por clínica, o cadastro de clínicas, o cadastro de usuários e a agenda (as
+telas do administrador) só ficam acessíveis para um usuário com `userRole = ADMIN`.
+
+Um admin logado pode cadastrar outro admin em `/admin/usuarios/novo` (chama
+`POST /usuarios/admin`, protegido — só usuários autenticados com a authority
+`USER_CREATE`, ou seja, já ADMIN, podem chamá-lo). Para o **primeiro** admin da instalação
+(bootstrap, quando ainda não existe nenhum ADMIN para logar):
 
 1. Suba o backend e acesse o Swagger em `http://localhost:8080/swagger-ui/index.html`.
 2. Use o endpoint `POST /profissionais` para cadastrar um usuário qualquer (defina
@@ -56,6 +60,12 @@ e `POST /pacientes`. Para conseguir um usuário admin para testes:
    (Se os nomes de tabela/coluna estiverem diferentes no seu banco, confira a estrutura
    real com `\d usuario` no `psql` — o Hibernate está com `ddl-auto=update`.)
 4. Faça login no Angular (`http://localhost:4200/login`) com esse `nomeUsuario`/`senha`.
+5. A partir daí, use `/admin/usuarios/novo` para cadastrar os próximos admins.
+
+Cada admin só pode ter **uma** clínica associada. O botão "Nova clínica" e a rota
+`/admin/clinicas/nova` só aparecem/ficam acessíveis enquanto `GET /clinicas/admin/{nomeUsuario}`
+não retornar nenhuma clínica para o admin logado; o backend também rejeita o cadastro
+(`POST /clinicas`) se o admin já tiver uma.
 
 ## Estrutura do projeto
 
@@ -68,14 +78,16 @@ src/app/
     auth/         # tela de login
     dashboard/     # dashboard por clínica (admin)
     clinicas/      # cadastro de clínica (admin)
+    usuarios/      # cadastro de usuário — admin/profissional/paciente (admin)
+    agenda/        # agenda com as consultas de todos os profissionais da clínica (admin)
     patient/       # telas do paciente
     professional/  # telas do profissional
 ```
 
 ## Limitações conhecidas do backend
 
-- Não existe um endpoint público para criar um usuário `ADMIN` (ver seção de login acima) —
-  o cadastro de clínica só cria profissionais (`userRole = PROFISSIONAL`).
+- Não existe endpoint público (sem autenticação) para criar um `ADMIN` — só um admin já
+  logado pode criar outro, em `POST /usuarios/admin` (ver seção de login acima).
 - O dashboard busca a clínica pelo nome (`GET /clinicas/{nome}/nome`); a busca por CNPJ
   (`GET /clinicas/{cnpj}/cnpj`) existe mas hoje não retorna pacientes/profissionais
   vinculados — prefira buscar pelo nome.

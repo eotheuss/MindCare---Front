@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, catchError, of } from 'rxjs';
 import { API_BASE_URL } from '../constants/api.constants';
 import { ClinicaDTO } from '../models/clinica.model';
 import { ConsultaDTO } from '../models/consulta.model';
@@ -15,6 +15,13 @@ export class ClinicaService {
 
   buscarPorCnpj(clinicaCnpj: string): Observable<ClinicaDTO> {
     return this.http.get<ClinicaDTO>(`${this.baseUrl}/${clinicaCnpj}/cnpj`);
+  }
+
+  /** Retorna a clínica do admin informado, ou null caso ele ainda não tenha nenhuma (404) ou a busca falhe. */
+  buscarPorAdmin(nomeUsuarioAdmin: string): Observable<ClinicaDTO | null> {
+    return this.http
+      .get<ClinicaDTO>(`${this.baseUrl}/admin/${nomeUsuarioAdmin}`)
+      .pipe(catchError(() => of(null)));
   }
 
   buscarPorNome(nome: string): Observable<ClinicaDTO> {

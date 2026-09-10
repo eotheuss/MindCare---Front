@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
+import { clinicaNaoAssociadaGuard } from './core/guards/clinica-nao-associada.guard';
 import { UserRole } from './core/models/enums';
 
 export const routes: Routes = [
@@ -85,10 +86,23 @@ export const routes: Routes = [
       },
       {
         path: 'clinicas/nova',
+        canActivate: [clinicaNaoAssociadaGuard],
         loadComponent: () =>
           import('./features/clinicas/clinica-form/clinica-form.component').then(
             (m) => m.ClinicaFormComponent
           ),
+      },
+      {
+        path: 'usuarios/novo',
+        loadComponent: () =>
+          import('./features/usuarios/usuario-form/usuario-form.component').then(
+            (m) => m.UsuarioFormComponent
+          ),
+      },
+      {
+        path: 'agenda',
+        loadComponent: () =>
+          import('./features/agenda/agenda.component').then((m) => m.AgendaComponent),
       },
     ],
   },

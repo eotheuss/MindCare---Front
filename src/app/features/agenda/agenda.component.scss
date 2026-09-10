@@ -1,0 +1,267 @@
+.agenda-page {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 1180px;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.header-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--brand-blue-pale);
+  color: var(--brand-blue-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.page-header h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.page-header p {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  margin: 2px 0 0;
+}
+
+.error-banner {
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  color: var(--danger);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.empty-state {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  padding: 60px 0;
+  text-align: center;
+}
+.empty-state.small {
+  padding: 30px 10px;
+  font-size: 0.82rem;
+}
+
+.agenda-layout {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.calendar-card,
+.day-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.calendar-header h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-transform: capitalize;
+}
+
+.nav-btn {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--ink-soft);
+}
+.nav-btn:hover {
+  color: var(--brand-blue-deep);
+  border-color: var(--brand-blue-deep);
+}
+
+.weekday-row,
+.week-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.weekday-row {
+  margin-bottom: 8px;
+}
+.weekday-row span {
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+}
+
+.week-row {
+  margin-bottom: 6px;
+}
+
+.day-cell {
+  position: relative;
+  aspect-ratio: 1;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  color: var(--ink);
+  font-size: 0.82rem;
+}
+
+.day-cell.out-of-month {
+  color: var(--ink-faint);
+  opacity: 0.5;
+}
+
+.day-cell.today {
+  border-color: var(--brand-blue);
+  font-weight: 700;
+}
+
+.day-cell.has-consultas {
+  cursor: pointer;
+  background: var(--brand-blue-pale);
+  color: var(--brand-blue-deep);
+  font-weight: 600;
+}
+.day-cell.has-consultas:hover {
+  transform: translateY(-1px);
+}
+
+.day-cell.selected {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--brand-blue-deep), var(--brand-indigo));
+  color: #fff;
+}
+
+.day-badge {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  background: var(--brand-blue-deep);
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  min-width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+}
+.day-cell.selected .day-badge {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.day-panel h3 {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-transform: capitalize;
+  margin: 0 0 14px;
+}
+
+.consultas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.consulta-item {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--brand-blue);
+  background: var(--surface-2);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.consulta-item.status-cancelada {
+  border-left-color: var(--danger);
+  opacity: 0.75;
+}
+.consulta-item.status-atendida {
+  border-left-color: var(--success);
+}
+
+.consulta-hora {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.consulta-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.consulta-linha {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.84rem;
+  color: var(--ink);
+}
+
+.status-badge {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 2px 8px;
+}
+.status-cancelada .status-badge {
+  color: var(--danger);
+}
+.status-atendida .status-badge {
+  color: var(--success);
+}
+
+@media (max-width: 860px) {
+  .agenda-layout {
+    grid-template-columns: 1fr;
+  }
+}

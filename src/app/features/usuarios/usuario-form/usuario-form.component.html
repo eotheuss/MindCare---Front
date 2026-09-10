@@ -1,0 +1,103 @@
+<div class="usuario-form-page">
+  <div class="page-header">
+    <div class="header-icon">
+      <lucide-angular [img]="icons.UserPlus" [size]="20" />
+    </div>
+    <div>
+      <h1>Novo usuário</h1>
+      <p>Cadastre um administrador, profissional ou paciente na plataforma.</p>
+    </div>
+  </div>
+
+  @if (sucesso()) {
+    <div class="success-banner">{{ sucesso() }}</div>
+  }
+  @if (erro()) {
+    <div class="error-banner">{{ erro() }}</div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <section class="card">
+      <h2>1. Tipo de usuário</h2>
+      <p class="card-sub">Escolha o papel do usuário na plataforma.</p>
+
+      <div class="roles-grid">
+        @for (role of roles; track role.valor) {
+          <button
+            type="button"
+            class="role-card"
+            [class.selected]="form.value.userRole === role.valor"
+            (click)="selecionarRole(role.valor)"
+          >
+            <lucide-angular [img]="role.icon" [size]="18" />
+            <span class="role-name">{{ role.label }}</span>
+            <span class="role-desc">{{ role.descricao }}</span>
+          </button>
+        }
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>2. Dados pessoais</h2>
+      <p class="card-sub">Informações de acesso e identificação do usuário.</p>
+
+      <div class="field-grid">
+        <div class="field">
+          <label for="nomeCompleto">Nome completo</label>
+          <input id="nomeCompleto" type="text" formControlName="nomeCompleto" placeholder="Ex.: Ana Beatriz Souza" />
+        </div>
+        <div class="field">
+          <label for="nomeUsuario">Nome de usuário (login)</label>
+          <input id="nomeUsuario" type="text" formControlName="nomeUsuario" placeholder="ana.souza@email.com" />
+        </div>
+      </div>
+
+      <div class="field-grid">
+        <div class="field">
+          <label for="senha">Senha inicial</label>
+          <input id="senha" type="password" formControlName="senha" placeholder="mín. 6 caracteres" />
+        </div>
+        <div class="field">
+          <label for="dataNascimento">Data de nascimento</label>
+          <input id="dataNascimento" type="date" formControlName="dataNascimento" />
+        </div>
+      </div>
+
+      <div class="field-grid">
+        <div class="field">
+          <label for="genero">Gênero</label>
+          <select id="genero" formControlName="genero">
+            <option value="FEMININO">Feminino</option>
+            <option value="MASCULINO">Masculino</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    @if (form.value.userRole === UserRole.PROFISSIONAL) {
+      <section class="card">
+        <h2>3. Dados profissionais</h2>
+        <p class="card-sub">Informações específicas do profissional de saúde.</p>
+
+        <div class="field-grid">
+          <div class="field">
+            <label for="tipoProfissional">Tipo</label>
+            <select id="tipoProfissional" formControlName="tipoProfissional">
+              @for (tipo of tiposProfissional; track tipo.valor) {
+                <option [value]="tipo.valor">{{ tipo.label }}</option>
+              }
+            </select>
+          </div>
+          <div class="field">
+            <label for="registroProfissional">Nº de registro (CRP/CRM)</label>
+            <input id="registroProfissional" type="text" formControlName="registroProfissional" placeholder="Ex.: CRP 06/123456" />
+          </div>
+        </div>
+      </section>
+    }
+
+    <button type="submit" class="submit-btn" [disabled]="enviando()">
+      {{ enviando() ? 'Cadastrando…' : 'Cadastrar usuário' }}
+    </button>
+  </form>
+</div>

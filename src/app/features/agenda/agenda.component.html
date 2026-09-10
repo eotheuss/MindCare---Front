@@ -1,0 +1,100 @@
+<div class="agenda-page">
+  <div class="page-header">
+    <div class="header-icon">
+      <lucide-angular [img]="icons.CalendarDays" [size]="20" />
+    </div>
+    <div>
+      <h1>Agenda da clínica</h1>
+      <p>Consultas agendadas de todos os profissionais da clínica.</p>
+    </div>
+  </div>
+
+  @if (erro()) {
+    <div class="error-banner">{{ erro() }}</div>
+  }
+
+  @if (carregando()) {
+    <div class="empty-state">Carregando agenda…</div>
+  } @else if (semClinica()) {
+    <div class="empty-state">Cadastre uma clínica para visualizar a agenda de consultas.</div>
+  } @else {
+    <div class="agenda-layout">
+      <section class="calendar-card">
+        <div class="calendar-header">
+          <button type="button" class="nav-btn" (click)="mesAnterior()">
+            <lucide-angular [img]="icons.ChevronLeft" [size]="18" />
+          </button>
+          <h2>{{ tituloMes() }}</h2>
+          <button type="button" class="nav-btn" (click)="mesSeguinte()">
+            <lucide-angular [img]="icons.ChevronRight" [size]="18" />
+          </button>
+        </div>
+
+        <div class="weekday-row">
+          @for (dia of diasSemana; track dia) {
+            <span>{{ dia }}</span>
+          }
+        </div>
+
+        @for (semana of semanas(); track $index) {
+          <div class="week-row">
+            @for (dia of semana; track dia.chave) {
+              <button
+                type="button"
+                class="day-cell"
+                [class.out-of-month]="!dia.noMes"
+                [class.today]="dia.hoje"
+                [class.selected]="diaSelecionadoChave() === dia.chave"
+                [class.has-consultas]="dia.consultas.length > 0"
+                [disabled]="dia.consultas.length === 0"
+                (click)="selecionarDia(dia)"
+              >
+                <span class="day-number">{{ dia.data.getDate() }}</span>
+                @if (dia.consultas.length > 0) {
+                  <span class="day-badge">{{ dia.consultas.length }}</span>
+                }
+              </button>
+            }
+          </div>
+        }
+      </section>
+
+      <section class="day-panel">
+        @if (diaSelecionadoChave()) {
+          <h3>{{ formatarDiaSelecionado() }}</h3>
+          <div class="consultas-list">
+            @for (consulta of consultasDoDiaSelecionado(); track $index) {
+              <div class="consulta-item" [class]="'status-' + statusConsulta(consulta)">
+                <div class="consulta-hora">
+                  <lucide-angular [img]="icons.Clock" [size]="14" />
+                  {{ formatarHora(consulta.dataHoraConsulta) }}
+                </div>
+                <div class="consulta-info">
+                  <div class="consulta-linha">
+                    <lucide-angular [img]="icons.Stethoscope" [size]="14" />
+                    <span>{{ consulta.profissional?.nomeCompleto || 'Profissional' }}</span>
+                  </div>
+                  <div class="consulta-linha">
+                    <lucide-angular [img]="icons.User" [size]="14" />
+                    <span>{{ consulta.paciente?.nomeCompleto || 'Paciente' }}</span>
+                  </div>
+                </div>
+                <span class="status-badge">
+                  @if (statusConsulta(consulta) === 'cancelada') {
+                    <lucide-angular [img]="icons.CircleX" [size]="13" /> Cancelada
+                  } @else if (statusConsulta(consulta) === 'atendida') {
+                    <lucide-angular [img]="icons.CircleCheckBig" [size]="13" /> Atendida
+                  } @else {
+                    Agendada
+                  }
+                </span>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="empty-state small">Selecione um dia com consultas marcadas para ver os detalhes.</div>
+        }
+      </section>
+    </div>
+  }
+</div>

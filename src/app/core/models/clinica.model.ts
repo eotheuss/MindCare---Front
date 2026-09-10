@@ -12,4 +12,5 @@ export interface ClinicaDTO {
   consultas: ConsultaDTO[];
   taxaComissao: number;
   planoAssinatura: string;
+  adminNomeUsuario?: string | null;
 }
