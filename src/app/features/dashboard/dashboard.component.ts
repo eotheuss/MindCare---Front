@@ -59,10 +59,10 @@ export class DashboardComponent {
 
     let nomeUsuario = this.authService.nomeUsuario();
 
-    this.clinicaService.buscarPorAdmin(nomeUsuario).pipe(
+    this.clinicaService.buscarPorAdmin(nomeUsuario!).pipe(
       catchError(() => {
         this.erro.set(
-          'Não foi possível carregar a clínica. Verifique o nome da clínica.'
+          'Não foi possível carregar os dados da clínica.'
         );
         return of(null);
       })

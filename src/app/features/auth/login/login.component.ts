@@ -40,6 +40,9 @@ export class LoginComponent {
     this.authService.login({ nomeUsuario: nomeUsuario!, senha: senha! }).subscribe({
       next: (resposta) => {
         this.loading.set(false);
+        if(resposta.userRole === UserRole.ADMIN) {
+          
+        }
         this.router.navigate([this.rotaInicialPorRole(resposta.userRole)]);
       },
       error: (err) => {

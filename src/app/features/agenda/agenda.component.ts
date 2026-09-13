@@ -130,18 +130,10 @@ export class AgendaComponent {
     const nomeUsuario = this.auth.nomeUsuario();
   
     this.clinicaService.buscarPorAdmin(nomeUsuario).subscribe({
-      next: (clinica: ClinicaDTO | null) => {
-  
-        if (!clinica) {
-          this.semClinica.set(true);
-          this.carregando.set(false);
-          this.clinica.set(null);
-          return;
-        }
-  
+      next: (clinica: ClinicaDTO) => {
+
         this.semClinica.set(false);
         this.clinica.set(clinica);
-        this.cnpj.set(clinica.cnpj);
   
         this.clinicaService.buscarConsultas(clinica.nome).subscribe({
           next: (consultas) => {
@@ -158,13 +150,20 @@ export class AgendaComponent {
           },
         });
       },
-  
       error: (error) => {
         console.error(error);
-        this.erro.set(
-          'Não foi possível carregar os dados da clínica.'
-        );
+        this.semClinica.set(true);
         this.carregando.set(false);
+        this.clinica.set(null);
+        if(error.status === 404) {
+          this.erro.set(
+            'Usuário não possui clínica associada.'
+          );
+        } else  {
+          this.erro.set(
+            'Não foi possível carregar os dados da clínica.'
+          );
+        }
       },
     });
   }

@@ -34,8 +34,8 @@ export class ClinicaService {
     return this.http.get<ProfissionalDTO[]>(`${this.baseUrl}/${clinicaCnpj}/profissionais`);
   }
 
-  buscarConsultas(nomeClinica: string): Observable<ConsultaDTO[]> {
-    return this.http.get<ConsultaDTO[]>(`${this.baseUrl}/${encodeURIComponent(nomeClinica)}/consultas`);
+  buscarConsultas(nomeClinica: string | null): Observable<ConsultaDTO[]> {
+    return this.http.get<ConsultaDTO[]>(`${this.baseUrl}/${nomeClinica}/consultas`);
   }
 
   /** Faturamento bruto (antes do desconto de comissão) de um mês/ano específico. */

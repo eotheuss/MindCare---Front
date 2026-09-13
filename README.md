@@ -63,7 +63,7 @@ Um admin logado pode cadastrar outro admin em `/admin/usuarios/novo` (chama
 5. A partir daí, use `/admin/usuarios/novo` para cadastrar os próximos admins.
 
 Cada admin só pode ter **uma** clínica associada. O botão "Nova clínica" e a rota
-`/admin/clinicas/nova` só aparecem/ficam acessíveis enquanto `GET /clinicas/admin/{nomeUsuario}`
+`/admin/nova-clinica` só aparecem/ficam acessíveis enquanto `GET /clinicas/admin/{nomeUsuario}`
 não retornar nenhuma clínica para o admin logado; o backend também rejeita o cadastro
 (`POST /clinicas`) se o admin já tiver uma.
 

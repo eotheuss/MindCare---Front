@@ -10,9 +10,16 @@ import {
   LogOut,
   Menu,
   Activity,
+  LucideIconData,
 } from 'lucide-angular';
 import { AuthService } from '../../core/services/auth.service';
 import { ClinicaService } from '../../core/services/clinica.service';
+
+interface NavItem {
+  icon: LucideIconData;
+  label: string;
+  route: string;
+}
 
 @Component({
   selector: 'app-shell',
@@ -21,31 +28,55 @@ import { ClinicaService } from '../../core/services/clinica.service';
   templateUrl: './shell.component.html',
   styleUrl: './shell.component.scss',
 })
-export class ShellComponent implements OnInit {
+export class ShellComponent {
   readonly icons = { LayoutDashboard, Building2, UserPlus, CalendarDays, LogOut, Menu, Activity };
   readonly sidebarOpen = signal(false);
   readonly possuiClinica = signal(false);
 
-  readonly navItems = computed(() => [
-    { icon: LayoutDashboard, label: 'Dashboard', route: '/admin/dashboard' },
-    { icon: CalendarDays, label: 'Agenda', route: '/admin/agenda' },
+  readonly navItems = computed<NavItem[]>(() => [
+    {
+      icon: LayoutDashboard,
+      label: 'Dashboard',
+      route: '/admin/dashboard',
+    },
+    ...(!this.possuiClinica()
+    ? []
+    : [
+        {
+          icon: CalendarDays,
+          label: 'Agenda',
+          route: '/admin/agenda',
+        }
+      ]),
     ...(this.possuiClinica()
-      ? []
-      : [{ icon: Building2, label: 'Nova clínica', route: '/admin/clinicas/nova' }]),
+    ? []
+    : [
+        {
+          icon: Building2,
+          label: 'Nova clínica',
+          route: '/admin/nova-clinica',
+        }
+      ])
   ]);
 
   constructor(
     public auth: AuthService,
     private clinicaService: ClinicaService,
     private router: Router
-  ) {}
-
-  ngOnInit(): void {
+  ) {
     const nomeUsuario = this.auth.nomeUsuario();
-    if (!nomeUsuario) return;
 
-    this.clinicaService.buscarPorAdmin(nomeUsuario).subscribe((clinica) => {
-      this.possuiClinica.set(!!clinica);
+    this.clinicaService.buscarPorAdmin(nomeUsuario).subscribe({
+      next: (clinica) => {
+        if(!clinica) {
+          this.possuiClinica.set(false);
+        } else {
+          this.possuiClinica.set(true);
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      }
     });
   }
 
