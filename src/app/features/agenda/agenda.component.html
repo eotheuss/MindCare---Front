@@ -75,6 +75,14 @@
                     <span>{{ consulta.profissional?.nomeCompleto || 'Profissional' }}</span>
                   </div>
                   <div class="consulta-linha">
+                    <lucide-angular [img]="icons.Stethoscope" [size]="14" />
+                    @if (consulta.profissional?.tipoProfissional === 'PSICOLOGO') {
+                      <span>{{ 'Psicólogo' || 'Tipo Profissional' }}</span>
+                    } @else if (consulta.profissional?.tipoProfissional === 'PSIQUIATRA') {
+                      <span>{{ 'Psiquiatra' || 'Tipo Profissional' }}</span>
+                    }
+                  </div>
+                  <div class="consulta-linha">
                     <lucide-angular [img]="icons.User" [size]="14" />
                     <span>{{ consulta.paciente?.nomeCompleto || 'Paciente' }}</span>
                   </div>
