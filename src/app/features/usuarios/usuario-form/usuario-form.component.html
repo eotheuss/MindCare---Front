@@ -99,5 +99,8 @@
     <button type="submit" class="submit-btn" [disabled]="enviando()">
       {{ enviando() ? 'Cadastrando…' : 'Cadastrar usuário' }}
     </button>
+    <button class="submit-btn" (click)="login()">
+      Login
+    </button>
   </form>
 </div>

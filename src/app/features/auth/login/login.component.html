@@ -26,6 +26,9 @@
       <button type="submit" class="submit-btn" [disabled]="loading()">
         {{ loading() ? 'Entrando…' : 'Entrar' }}
       </button>
+      <button class="submit-btn" (click)="novoCadastro()">
+        Novo Cadastro
+      </button>
     </form>
   </div>
 

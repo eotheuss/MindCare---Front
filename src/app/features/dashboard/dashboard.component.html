@@ -3,21 +3,12 @@
     <div class="lookup-title">
       <lucide-angular [img]="icons.Building2" [size]="18" />
       <div>
-        <h2>Selecionar clínica</h2>
-        <p>Informe o nome da clínica manualmente.</p>
+        <h2>Selecionar ano</h2>
+        <p>Informe o ano para o qual deseja informações.</p>
       </div>
     </div>
 
     <div class="lookup-fields">
-      <div class="field">
-        <label for="clinicaNome">Nome da clínica</label>
-        <input
-          id="clinicaNome"
-          type="string"
-          [ngModel]="clinicaNome()"
-          (ngModelChange)="clinicaNome.set($event)"
-          placeholder="Ex.: Clínica Saúde e Bem Estar"/>
-      </div>
       <div class="field">
         <label for="ano">Ano</label>
         <input id="ano" type="number" [ngModel]="ano()" (ngModelChange)="ano.set($event)" />

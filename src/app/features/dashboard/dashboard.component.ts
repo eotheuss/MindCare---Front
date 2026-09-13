@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { LucideAngularModule, DollarSign, TrendingUp, Users, UserCheck, Building2 } from 'lucide-angular';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { AuthService } from '../../core/services/auth.service';
 import { ClinicaService } from '../../core/services/clinica.service';
 import { BarChartComponent, BarChartPoint } from '../../shared/components/bar-chart/bar-chart.component';
 import { StatCardComponent } from '../../shared/components/stat-card/stat-card.component';
@@ -49,19 +50,16 @@ export class DashboardComponent {
     this.serieMensal().reduce((soma, ponto) => soma + ponto.liquido, 0)
   );
 
-  constructor(private clinicaService: ClinicaService) {}
+  constructor(private authService: AuthService, private clinicaService: ClinicaService) {}
 
-  carregar(): void {
-    const nome = this.clinicaNome();
-    if (!nome) {
-      this.erro.set('Informe o nome da clínica.');
-      return;
-    }
+  carregar(): void { 
 
     this.loading.set(true);
     this.erro.set(null);
 
-    this.clinicaService.buscarPorNome(nome).pipe(
+    let nomeUsuario = this.authService.nomeUsuario();
+
+    this.clinicaService.buscarPorAdmin(nomeUsuario).pipe(
       catchError(() => {
         this.erro.set(
           'Não foi possível carregar a clínica. Verifique o nome da clínica.'

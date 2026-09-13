@@ -3,11 +3,16 @@ import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
 import { clinicaNaoAssociadaGuard } from './core/guards/clinica-nao-associada.guard';
 import { UserRole } from './core/models/enums';
+import { UsuarioFormComponent } from './features/usuarios/usuario-form/usuario-form.component';
 
 export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () => import('./features/auth/login/login.component').then((m) => m.LoginComponent),
+  },
+  {
+    path: 'cadastro',
+    loadComponent: () => import('./features/usuarios/usuario-form/usuario-form.component').then((m) => UsuarioFormComponent),
   },
 
   // ---- Paciente ----
@@ -90,13 +95,6 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/clinicas/clinica-form/clinica-form.component').then(
             (m) => m.ClinicaFormComponent
-          ),
-      },
-      {
-        path: 'usuarios/novo',
-        loadComponent: () =>
-          import('./features/usuarios/usuario-form/usuario-form.component').then(
-            (m) => m.UsuarioFormComponent
           ),
       },
       {

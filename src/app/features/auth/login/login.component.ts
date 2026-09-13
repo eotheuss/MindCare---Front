@@ -55,6 +55,10 @@ export class LoginComponent {
     });
   }
 
+  novoCadastro() {
+    this.router.navigate(['/cadastro']);
+  }
+
   private rotaInicialPorRole(userRole: string): string {
     switch (userRole) {
       case UserRole.PACIENTE:

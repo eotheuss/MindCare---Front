@@ -29,7 +29,6 @@ export class ShellComponent implements OnInit {
   readonly navItems = computed(() => [
     { icon: LayoutDashboard, label: 'Dashboard', route: '/admin/dashboard' },
     { icon: CalendarDays, label: 'Agenda', route: '/admin/agenda' },
-    { icon: UserPlus, label: 'Novo usuário', route: '/admin/usuarios/novo' },
     ...(this.possuiClinica()
       ? []
       : [{ icon: Building2, label: 'Nova clínica', route: '/admin/clinicas/nova' }]),

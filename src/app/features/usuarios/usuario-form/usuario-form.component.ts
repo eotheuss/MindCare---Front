@@ -9,6 +9,7 @@ import { Sexo, TIPOS_PROFISSIONAL, TipoProfissional, UserRole } from '../../../c
 import { ProfissionalDTO } from '../../../core/models/profissional.model';
 import { PacienteDTO } from '../../../core/models/paciente.model';
 import { UsuarioDTO } from '../../../core/models/usuario.model';
+import { Router } from '@angular/router';
 
 const ROLES = [
   { valor: UserRole.ADMIN, label: 'Administrador', descricao: 'Acesso total: gerencia clínica, usuários e agenda.', icon: ShieldCheck },
@@ -48,7 +49,8 @@ export class UsuarioFormComponent {
     private fb: FormBuilder,
     private usuarioService: UsuarioService,
     private profissionalService: ProfissionalService,
-    private pacienteService: PacienteService
+    private pacienteService: PacienteService,
+    private router: Router
   ) {
     this.form.get('userRole')!.valueChanges.subscribe((role) => this.atualizarValidadoresPorRole(role));
     this.atualizarValidadoresPorRole(this.form.value.userRole!);
@@ -122,6 +124,10 @@ export class UsuarioFormComponent {
         break;
       }
     }
+  }
+
+  login() {
+    this.router.navigate(['/login']);
   }
 
   private aoSalvarComSucesso(mensagem: string): void {

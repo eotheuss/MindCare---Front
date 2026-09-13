@@ -18,14 +18,12 @@ export class ClinicaService {
   }
 
   /** Retorna a clínica do admin informado, ou null caso ele ainda não tenha nenhuma (404) ou a busca falhe. */
-  buscarPorAdmin(nomeUsuarioAdmin: string): Observable<ClinicaDTO | null> {
-    return this.http
-      .get<ClinicaDTO>(`${this.baseUrl}/admin/${nomeUsuarioAdmin}`)
-      .pipe(catchError(() => of(null)));
+  buscarPorAdmin(nomeUsuario: string | null): Observable<ClinicaDTO> {
+    return this.http.get<ClinicaDTO>(`${this.baseUrl}/admin/${nomeUsuario}`);
   }
 
-  buscarPorNome(nome: string): Observable<ClinicaDTO> {
-    return this.http.get<ClinicaDTO>(`${this.baseUrl}/${nome}/nome`);
+  buscarPorNome(nomeClinica: string): Observable<ClinicaDTO> {
+    return this.http.get<ClinicaDTO>(`${this.baseUrl}/${nomeClinica}/nome`);
   }
 
   buscarPacientes(clinicaCnpj: string): Observable<PacienteDTO[]> {
@@ -36,8 +34,8 @@ export class ClinicaService {
     return this.http.get<ProfissionalDTO[]>(`${this.baseUrl}/${clinicaCnpj}/profissionais`);
   }
 
-  buscarConsultas(clinicaCnpj: string): Observable<ConsultaDTO[]> {
-    return this.http.get<ConsultaDTO[]>(`${this.baseUrl}/${clinicaCnpj}/consultas`);
+  buscarConsultas(nomeClinica: string): Observable<ConsultaDTO[]> {
+    return this.http.get<ConsultaDTO[]>(`${this.baseUrl}/${encodeURIComponent(nomeClinica)}/consultas`);
   }
 
   /** Faturamento bruto (antes do desconto de comissão) de um mês/ano específico. */

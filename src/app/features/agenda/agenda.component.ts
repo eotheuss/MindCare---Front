@@ -1,3 +1,4 @@
+import { ClinicaDTO } from './../../core/models/clinica.model';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, computed, signal } from '@angular/core';
 import {
@@ -40,7 +41,7 @@ function chaveData(data: Date): string {
   templateUrl: './agenda.component.html',
   styleUrl: './agenda.component.scss',
 })
-export class AgendaComponent implements OnInit {
+export class AgendaComponent {
   readonly icons = { CalendarDays, ChevronLeft, ChevronRight, Clock, Stethoscope, User, CircleX, CircleCheckBig };
   readonly diasSemana = DIAS_SEMANA;
   readonly meses = MESES;
@@ -108,32 +109,63 @@ export class AgendaComponent implements OnInit {
     return this.consultasPorDia().get(chave) ?? [];
   });
 
+  clinica = signal<ClinicaDTO | null>({
+      nome: '',
+      cnpj: '',
+      endereco: '',
+      profissionais: [],
+      pacientes: [],
+      consultas: [],
+      taxaComissao: 0,
+      planoAssinatura: '',
+      adminNomeUsuario: '',
+  });
+
+  cnpj = signal<string>('');
+
   constructor(
     private auth: AuthService,
     private clinicaService: ClinicaService
-  ) {}
-
-  ngOnInit(): void {
+  ) {
     const nomeUsuario = this.auth.nomeUsuario();
-    if (!nomeUsuario) return;
-
-    this.clinicaService.buscarPorAdmin(nomeUsuario).subscribe((clinica) => {
-      if (!clinica) {
-        this.semClinica.set(true);
+  
+    this.clinicaService.buscarPorAdmin(nomeUsuario).subscribe({
+      next: (clinica: ClinicaDTO | null) => {
+  
+        if (!clinica) {
+          this.semClinica.set(true);
+          this.carregando.set(false);
+          this.clinica.set(null);
+          return;
+        }
+  
+        this.semClinica.set(false);
+        this.clinica.set(clinica);
+        this.cnpj.set(clinica.cnpj);
+  
+        this.clinicaService.buscarConsultas(clinica.nome).subscribe({
+          next: (consultas) => {
+            console.log('Consultas:', consultas);
+            this.consultas.set(consultas);
+            this.carregando.set(false);
+          },
+          error: (error) => {
+            console.error(error);
+            this.erro.set(
+              'Não foi possível carregar as consultas da clínica.'
+            );
+            this.carregando.set(false);
+          },
+        });
+      },
+  
+      error: (error) => {
+        console.error(error);
+        this.erro.set(
+          'Não foi possível carregar os dados da clínica.'
+        );
         this.carregando.set(false);
-        return;
-      }
-
-      this.clinicaService.buscarConsultas(clinica.cnpj).subscribe({
-        next: (consultas) => {
-          this.consultas.set(consultas);
-          this.carregando.set(false);
-        },
-        error: () => {
-          this.erro.set('Não foi possível carregar as consultas da clínica.');
-          this.carregando.set(false);
-        },
-      });
+      },
     });
   }
 
