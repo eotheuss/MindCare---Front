@@ -34,6 +34,7 @@ export class AuthService {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(ROLE_KEY);
     localStorage.removeItem(USERNAME_KEY);
+    localStorage.removeItem(POSSUI_CLINICA);
     this.userRole.set(null);
     this.nomeUsuario.set(null);
   }
